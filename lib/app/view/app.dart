@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smart_cal/home/home.dart';
 import 'package:smart_cal/l10n/l10n.dart';
 
 class App extends StatelessWidget {
@@ -6,16 +8,18 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return ProviderScope(
+      child: MaterialApp(
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          useMaterial3: true,
         ),
-        useMaterial3: true,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HomeScreen(),
       ),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const Scaffold(),
     );
   }
 }
