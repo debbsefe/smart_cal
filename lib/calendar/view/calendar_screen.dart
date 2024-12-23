@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_cal/calendar/calendar.dart';
 import 'package:smart_cal/core/core.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -29,13 +30,18 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   }
 
   List<SmartEvent> _getEventsForDay(DateTime day) {
-    // Implementation example
     return kEvents[day] ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(SmartEventEditor.getRoute());
+        },
+        child: const Icon(Icons.add),
+      ),
       body: Column(
         children: [
           TableCalendar<SmartEvent>(
