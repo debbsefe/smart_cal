@@ -114,3 +114,4 @@ app.*.map.json
 !.idea/runConfigurations/
 
 **/*service_account.json
+**/android/keystore
