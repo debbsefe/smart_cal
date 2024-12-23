@@ -1,0 +1,48 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Upload staging build to PlayStore"
+  lane :stg do
+    changelog_from_git_commits(
+      commits_count: 1
+    )
+
+    upload_to_play_store(
+      package_name: "com.mamus.cal.smart.stg",
+      track: "internal",
+      # PlayStore only allows draft status until we release one alpha channel
+      # build
+      release_status: "completed",
+      aab: "../build/app/outputs/bundle/stagingRelease/app-staging-release.aab",
+    )
+  end
+  
+  desc "Upload production build to PlayStore"
+  lane :prod do
+    changelog_from_git_commits()
+
+    upload_to_play_store(
+      package_name: "com.mamus.cal.smart",
+      track: "internal",
+      # PlayStore only allows draft status until we release one alpha channel
+      # build
+      release_status: "draft",
+      aab: "../build/app/outputs/bundle/productionRelease/app-production-release.aab",
+    )
+  end
+end
