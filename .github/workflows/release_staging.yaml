@@ -1,0 +1,66 @@
+name: smart-cal-stg
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{github.event.after}}
+
+      - name: key.properties File
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: 'key.properties'
+          fileDir: './android'
+          encodedString: ${{ secrets.ANDROID_KEY_PROPERTIES }}
+
+      - name: upload-keystore.jks File
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: 'upload-keystore.jks'
+          fileDir: './android/app'
+          encodedString: ${{ secrets.ANDROID_UPLOAD_KEYSTORE }}
+
+      - name: service-account.json File
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: 'deploy_service_account.json'
+          fileDir: './android/fastlane'
+          encodedString: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
+
+      - uses: subosito/flutter-action@v2.5.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2'
+
+      - name: Build Flutter appbundle
+        run: flutter build appbundle --flavor staging -t lib/main_staging.dart --build-number $GITHUB_RUN_NUMBER
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: app-staging-release.aab
+          path: build/app/outputs/bundle/stagingRelease/app-staging-release.aab
+
+      - uses: maierj/fastlane-action@v2.2.0
+        name: Upload appbundle
+        with:
+          subdirectory: 'android/'
+          skip-tracking: true
+          lane: 'stg'
+          bundle-install-path: 'vendor/bundle'
