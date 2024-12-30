@@ -40,7 +40,7 @@ jobs:
           fileDir: './android/fastlane'
           encodedString: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
 
-      - uses: subosito/flutter-action@v2.5.0
+      - uses: subosito/flutter-action@v2.18.0
         with:
           channel: 'stable'
           cache: true
