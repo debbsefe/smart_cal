@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:smart_cal/core/core.dart';
-import 'package:smart_cal/core/data/database/database.dart';
 
 part 'smart_event_dao.g.dart';
 

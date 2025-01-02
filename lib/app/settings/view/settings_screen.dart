@@ -2,7 +2,6 @@ import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_cal/core/core.dart';
-import 'package:smart_cal/core/data/database/database.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});

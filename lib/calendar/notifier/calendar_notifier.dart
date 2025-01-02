@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:smart_cal/core/core.dart';
-import 'package:smart_cal/core/data/database/database.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 part 'calendar_notifier.freezed.dart';
