@@ -1,15 +1,23 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_cal/app/app.dart';
+import 'package:smart_cal/core/core.dart';
 
 void main() {
-  group('App', () {
-    testWidgets('renders CounterPage', (tester) async {
-      await tester.pumpWidget(
-        App(
-          container: ProviderContainer(),
+  late Database db;
+  db = Database('db', 'test123', e: NativeDatabase.memory());
+
+  testWidgets('renders App', (tester) async {
+    await tester.pumpWidget(
+      App(
+        container: ProviderContainer(
+          overrides: [
+            databaseProvider.overrideWithValue(
+              db,
+            ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   });
 }
