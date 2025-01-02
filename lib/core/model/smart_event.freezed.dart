@@ -25,6 +25,8 @@ mixin _$SmartEvent {
   DateTime get date => throw _privateConstructorUsedError;
   @TimeOfDayJsonConverter()
   TimeOfDay get time => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   bool? get isRecurring => throw _privateConstructorUsedError;
   RecurringType? get recurringType => throw _privateConstructorUsedError;
@@ -51,6 +53,8 @@ abstract class $SmartEventCopyWith<$Res> {
       String title,
       DateTime date,
       @TimeOfDayJsonConverter() TimeOfDay time,
+      DateTime createdAt,
+      DateTime updatedAt,
       String? description,
       bool? isRecurring,
       RecurringType? recurringType,
@@ -76,6 +80,8 @@ class _$SmartEventCopyWithImpl<$Res, $Val extends SmartEvent>
     Object? title = null,
     Object? date = null,
     Object? time = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
     Object? description = freezed,
     Object? isRecurring = freezed,
     Object? recurringType = freezed,
@@ -98,6 +104,14 @@ class _$SmartEventCopyWithImpl<$Res, $Val extends SmartEvent>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as TimeOfDay,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -131,6 +145,8 @@ abstract class _$$SmartEventImplCopyWith<$Res>
       String title,
       DateTime date,
       @TimeOfDayJsonConverter() TimeOfDay time,
+      DateTime createdAt,
+      DateTime updatedAt,
       String? description,
       bool? isRecurring,
       RecurringType? recurringType,
@@ -154,6 +170,8 @@ class __$$SmartEventImplCopyWithImpl<$Res>
     Object? title = null,
     Object? date = null,
     Object? time = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
     Object? description = freezed,
     Object? isRecurring = freezed,
     Object? recurringType = freezed,
@@ -176,6 +194,14 @@ class __$$SmartEventImplCopyWithImpl<$Res>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as TimeOfDay,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -204,6 +230,8 @@ class _$SmartEventImpl extends _SmartEvent {
       required this.title,
       required this.date,
       @TimeOfDayJsonConverter() required this.time,
+      required this.createdAt,
+      required this.updatedAt,
       this.description,
       this.isRecurring,
       this.recurringType,
@@ -223,6 +251,10 @@ class _$SmartEventImpl extends _SmartEvent {
   @TimeOfDayJsonConverter()
   final TimeOfDay time;
   @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
   final String? description;
   @override
   final bool? isRecurring;
@@ -230,11 +262,6 @@ class _$SmartEventImpl extends _SmartEvent {
   final RecurringType? recurringType;
   @override
   final bool? adjustBasedOnCompletion;
-
-  @override
-  String toString() {
-    return 'SmartEvent(id: $id, title: $title, date: $date, time: $time, description: $description, isRecurring: $isRecurring, recurringType: $recurringType, adjustBasedOnCompletion: $adjustBasedOnCompletion)';
-  }
 
   @override
   bool operator ==(Object other) {
@@ -245,6 +272,10 @@ class _$SmartEventImpl extends _SmartEvent {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.time, time) || other.time == time) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.isRecurring, isRecurring) ||
@@ -258,8 +289,18 @@ class _$SmartEventImpl extends _SmartEvent {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, date, time,
-      description, isRecurring, recurringType, adjustBasedOnCompletion);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      date,
+      time,
+      createdAt,
+      updatedAt,
+      description,
+      isRecurring,
+      recurringType,
+      adjustBasedOnCompletion);
 
   /// Create a copy of SmartEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -283,6 +324,8 @@ abstract class _SmartEvent extends SmartEvent {
       required final String title,
       required final DateTime date,
       @TimeOfDayJsonConverter() required final TimeOfDay time,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
       final String? description,
       final bool? isRecurring,
       final RecurringType? recurringType,
@@ -301,6 +344,10 @@ abstract class _SmartEvent extends SmartEvent {
   @override
   @TimeOfDayJsonConverter()
   TimeOfDay get time;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
   @override
   String? get description;
   @override

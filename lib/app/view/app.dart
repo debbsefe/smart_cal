@@ -10,7 +10,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CustomTheme();
 
-    return ProviderScope(
+    return UncontrolledProviderScope(
+      container: container,
       child: MaterialApp(
         theme: theme.defaultThemeData(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,

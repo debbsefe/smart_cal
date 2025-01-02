@@ -63,6 +63,18 @@ class $SmartEventTableTable extends SmartEventTable
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<RecurringType?>(
               $SmartEventTableTable.$converterrecurringTypen);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -72,7 +84,9 @@ class $SmartEventTableTable extends SmartEventTable
         time,
         isRecurring,
         adjustBasedOnCompletion,
-        recurringType
+        recurringType,
+        createdAt,
+        updatedAt
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -122,6 +136,18 @@ class $SmartEventTableTable extends SmartEventTable
               _adjustBasedOnCompletionMeta));
     }
     context.handle(_recurringTypeMeta, const VerificationResult.success());
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
     return context;
   }
 
@@ -140,6 +166,10 @@ class $SmartEventTableTable extends SmartEventTable
       time: $SmartEventTableTable.$convertertime.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}time'])!),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
       isRecurring: attachedDatabase.typeMapping
@@ -177,6 +207,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
   final Value<bool?> isRecurring;
   final Value<bool?> adjustBasedOnCompletion;
   final Value<RecurringType?> recurringType;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const SmartEventTableCompanion({
     this.id = const Value.absent(),
@@ -187,6 +219,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     this.isRecurring = const Value.absent(),
     this.adjustBasedOnCompletion = const Value.absent(),
     this.recurringType = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SmartEventTableCompanion.insert({
@@ -198,11 +232,15 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     this.isRecurring = const Value.absent(),
     this.adjustBasedOnCompletion = const Value.absent(),
     this.recurringType = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime updatedAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         title = Value(title),
         date = Value(date),
-        time = Value(time);
+        time = Value(time),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt);
   static Insertable<SmartEvent> custom({
     Expression<String>? id,
     Expression<String>? title,
@@ -212,6 +250,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     Expression<bool>? isRecurring,
     Expression<bool>? adjustBasedOnCompletion,
     Expression<String>? recurringType,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -224,6 +264,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       if (adjustBasedOnCompletion != null)
         'adjust_based_on_completion': adjustBasedOnCompletion,
       if (recurringType != null) 'recurring_type': recurringType,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -237,6 +279,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       Value<bool?>? isRecurring,
       Value<bool?>? adjustBasedOnCompletion,
       Value<RecurringType?>? recurringType,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt,
       Value<int>? rowid}) {
     return SmartEventTableCompanion(
       id: id ?? this.id,
@@ -248,6 +292,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       adjustBasedOnCompletion:
           adjustBasedOnCompletion ?? this.adjustBasedOnCompletion,
       recurringType: recurringType ?? this.recurringType,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -283,6 +329,12 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
           .$converterrecurringTypen
           .toSql(recurringType.value));
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -300,6 +352,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
           ..write('isRecurring: $isRecurring, ')
           ..write('adjustBasedOnCompletion: $adjustBasedOnCompletion, ')
           ..write('recurringType: $recurringType, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -311,6 +365,7 @@ abstract class _$Database extends GeneratedDatabase {
   $DatabaseManager get managers => $DatabaseManager(this);
   late final $SmartEventTableTable smartEventTable =
       $SmartEventTableTable(this);
+  late final SmartEventDao smartEventDao = SmartEventDao(this as Database);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -328,6 +383,8 @@ typedef $$SmartEventTableTableCreateCompanionBuilder = SmartEventTableCompanion
   Value<bool?> isRecurring,
   Value<bool?> adjustBasedOnCompletion,
   Value<RecurringType?> recurringType,
+  required DateTime createdAt,
+  required DateTime updatedAt,
   Value<int> rowid,
 });
 typedef $$SmartEventTableTableUpdateCompanionBuilder = SmartEventTableCompanion
@@ -340,6 +397,8 @@ typedef $$SmartEventTableTableUpdateCompanionBuilder = SmartEventTableCompanion
   Value<bool?> isRecurring,
   Value<bool?> adjustBasedOnCompletion,
   Value<RecurringType?> recurringType,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
   Value<int> rowid,
 });
 
@@ -380,6 +439,12 @@ class $$SmartEventTableTableFilterComposer
       get recurringType => $composableBuilder(
           column: $table.recurringType,
           builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$SmartEventTableTableOrderingComposer
@@ -416,6 +481,12 @@ class $$SmartEventTableTableOrderingComposer
   ColumnOrderings<String> get recurringType => $composableBuilder(
       column: $table.recurringType,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
 }
 
 class $$SmartEventTableTableAnnotationComposer
@@ -451,6 +522,12 @@ class $$SmartEventTableTableAnnotationComposer
   GeneratedColumnWithTypeConverter<RecurringType?, String> get recurringType =>
       $composableBuilder(
           column: $table.recurringType, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$SmartEventTableTableTableManager extends RootTableManager<
@@ -484,6 +561,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             Value<bool?> isRecurring = const Value.absent(),
             Value<bool?> adjustBasedOnCompletion = const Value.absent(),
             Value<RecurringType?> recurringType = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SmartEventTableCompanion(
@@ -495,6 +574,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             isRecurring: isRecurring,
             adjustBasedOnCompletion: adjustBasedOnCompletion,
             recurringType: recurringType,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -506,6 +587,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             Value<bool?> isRecurring = const Value.absent(),
             Value<bool?> adjustBasedOnCompletion = const Value.absent(),
             Value<RecurringType?> recurringType = const Value.absent(),
+            required DateTime createdAt,
+            required DateTime updatedAt,
             Value<int> rowid = const Value.absent(),
           }) =>
               SmartEventTableCompanion.insert(
@@ -517,6 +600,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             isRecurring: isRecurring,
             adjustBasedOnCompletion: adjustBasedOnCompletion,
             recurringType: recurringType,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

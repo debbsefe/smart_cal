@@ -18,6 +18,8 @@ class SmartEventTable extends Table {
   BoolColumn get isRecurring => boolean().nullable()();
   BoolColumn get adjustBasedOnCompletion => boolean().nullable()();
   TextColumn get recurringType => textEnum<RecurringType>().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
 
   @override
   Set<Column>? get primaryKey => {id};
@@ -67,6 +69,8 @@ class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
     required String title,
     required DateTime date,
     @TimeOfDayJsonConverter() required TimeOfDay time,
+    required DateTime createdAt,
+    required DateTime updatedAt,
     String? description,
     bool? isRecurring,
     RecurringType? recurringType,
@@ -79,12 +83,17 @@ class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
       _$SmartEventFromJson(json);
 
   @override
+  String toString() => title;
+
+  @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     return SmartEventTableCompanion(
       id: Value(id),
       title: Value(title),
       date: Value(date),
       time: Value(time),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
       description:
           description == null ? const Value.absent() : Value(description),
       isRecurring:

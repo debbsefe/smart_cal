@@ -7,8 +7,10 @@ import 'package:flutter/material.dart' hide Table;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:smart_cal/core/dao/smart_event_dao.dart';
 import 'package:smart_cal/core/model/smart_event.dart';
 import 'package:smart_cal/core/provider/support_dir_provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:sqlite3/open.dart';
 
 part 'database.g.dart';
@@ -16,7 +18,7 @@ part 'database.g.dart';
 final _log = Logger('Database');
 
 final databaseProvider = Provider.autoDispose((ref) {
-  final dbName = '${ref.read(supportDirProvider).path}/smart_cal.sqlite';
+  final dbName = '${ref.watch(supportDirProvider).path}/smart_cal.sqlite';
   // TODO(anyone): replace this with a real password
   const password = 'not_a_real_password';
   final database = Database(
@@ -36,7 +38,9 @@ final databaseProvider = Provider.autoDispose((ref) {
   tables: [
     SmartEventTable,
   ],
-  daos: [],
+  daos: [
+    SmartEventDao,
+  ],
 )
 class Database extends _$Database {
   Database(String dbName, String password, {QueryExecutor? e})

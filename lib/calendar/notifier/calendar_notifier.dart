@@ -1,37 +1,35 @@
 import 'dart:collection';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smart_cal/core/core.dart';
+import 'package:smart_cal/core/data/database/database.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 part 'calendar_notifier.freezed.dart';
-part 'calendar_notifier.g.dart';
 part 'calendar_state.dart';
 
-@riverpod
-class CalendarNotifier extends _$CalendarNotifier {
-  @override
-  CalendarState build() => CalendarState(selectedDate: DateTime.now());
+final calendarNotifierProvider =
+    StateNotifierProvider.autoDispose<CalendarNotifier, CalendarState>(
+  (ref) => CalendarNotifier(database: ref.watch(databaseProvider))..init(),
+);
 
-  void saveEvent(SmartEvent event) {
-    state = state.copyWith(
-      events: [...state.events, event],
-    );
+class CalendarNotifier extends StateNotifier<CalendarState> {
+  CalendarNotifier({required Database database})
+      : _database = database,
+        super(CalendarState(selectedDate: DateTime.now()));
+  final Database _database;
+
+  Future<void> init() async {
+    _database.smartEventDao.watchAllEvents().listen((event) {
+      state = state.copyWith(events: event);
+    });
   }
 
-  void deleteEvent(SmartEvent event) {
-    state = state.copyWith(
-      events: state.events.where((e) => e.id != event.id).toList(),
-    );
+  Future<void> saveEvent(SmartEvent event) async {
+    await _database.smartEventDao.insertEvent(event);
   }
 
-  void updateEvent(SmartEvent event) {
-    state = state.copyWith(
-      events: [
-        for (final e in state.events)
-          if (e.id == event.id) event else e,
-      ],
-    );
+  Future<void> deleteEvent(SmartEvent event) async {
+    await _database.smartEventDao.insertEvent(event);
   }
 }

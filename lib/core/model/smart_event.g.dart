@@ -13,6 +13,8 @@ _$SmartEventImpl _$$SmartEventImplFromJson(Map<String, dynamic> json) =>
       date: DateTime.parse(json['date'] as String),
       time: const TimeOfDayJsonConverter()
           .fromJson((json['time'] as num).toInt()),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
       description: json['description'] as String?,
       isRecurring: json['isRecurring'] as bool?,
       recurringType:
@@ -26,6 +28,8 @@ Map<String, dynamic> _$$SmartEventImplToJson(_$SmartEventImpl instance) =>
       'title': instance.title,
       'date': instance.date.toIso8601String(),
       'time': const TimeOfDayJsonConverter().toJson(instance.time),
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
       'description': instance.description,
       'isRecurring': instance.isRecurring,
       'recurringType': _$RecurringTypeEnumMap[instance.recurringType],

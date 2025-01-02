@@ -150,32 +150,20 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
             ElevatedButton(
               onPressed: () {
                 if (_titleController.text.isNotEmpty) {
-                  if (widget.event != null) {
-                    ref.watch(calendarNotifierProvider.notifier).updateEvent(
-                          widget.event!.copyWith(
-                            title: _titleController.text,
-                            description: _descriptionController.text,
-                            date: _selectedDate,
-                            time: _selectedTime,
-                            adjustBasedOnCompletion: adjustBasedOnCompletion,
-                            isRecurring: recurring,
-                            recurringType: recurringType,
-                          ),
-                        );
-                  } else {
-                    ref.watch(calendarNotifierProvider.notifier).saveEvent(
-                          SmartEvent(
-                            id: const Uuid().v4(),
-                            title: _titleController.text,
-                            description: _descriptionController.text,
-                            date: _selectedDate,
-                            time: _selectedTime,
-                            adjustBasedOnCompletion: adjustBasedOnCompletion,
-                            isRecurring: recurring,
-                            recurringType: recurringType,
-                          ),
-                        );
-                  }
+                  ref.watch(calendarNotifierProvider.notifier).saveEvent(
+                        SmartEvent(
+                          id: widget.event?.id ?? const Uuid().v4(),
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                          date: _selectedDate,
+                          time: _selectedTime,
+                          adjustBasedOnCompletion: adjustBasedOnCompletion,
+                          isRecurring: recurring,
+                          recurringType: recurringType,
+                          createdAt: widget.event?.createdAt ?? DateTime.now(),
+                          updatedAt: DateTime.now(),
+                        ),
+                      );
 
                   Navigator.of(context).pop();
                 } else {
