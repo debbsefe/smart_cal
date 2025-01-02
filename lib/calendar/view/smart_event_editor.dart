@@ -30,8 +30,8 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
       DateTime.now().subtract(const Duration(days: 36525));
   DateTime lastDate = DateTime.now().add(const Duration(days: 36525));
 
-  bool adjustBasedOnCompletion = false;
-  bool recurring = false;
+  bool? adjustBasedOnCompletion;
+  bool? recurring;
   RecurringType? recurringType;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -115,7 +115,7 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
               ),
             ),
             SwitchListTile(
-              value: adjustBasedOnCompletion,
+              value: adjustBasedOnCompletion ?? false,
               onChanged: (value) {
                 setState(() {
                   adjustBasedOnCompletion = value;
@@ -124,7 +124,7 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
               title: Text(l10n.adjustBasedOnCompletionDate),
             ),
             SwitchListTile(
-              value: recurring,
+              value: recurring ?? false,
               onChanged: (value) {
                 setState(() {
                   recurring = value;
@@ -132,7 +132,7 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
               },
               title: Text(l10n.recurringEvent),
             ),
-            if (recurring)
+            if (recurring ?? false)
               DropdownButton<RecurringType>(
                 items: RecurringType.values.map((e) {
                   return DropdownMenuItem<RecurringType>(
