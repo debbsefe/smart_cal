@@ -61,6 +61,4 @@ jobs:
         name: Upload appbundle
         with:
           subdirectory: 'android/'
-          skip-tracking: true
           lane: 'stg'
-          bundle-install-path: 'vendor/bundle'
