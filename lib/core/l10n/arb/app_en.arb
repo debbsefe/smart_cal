@@ -1,0 +1,12 @@
+{
+    "@@locale": "en",
+    "createNewEvent": "Create new event",
+    "eventTitle": "Event title",
+    "eventDescription": "Event description",
+    "eventDate": "Event date",
+    "eventTime": "Event time",
+    "adjustBasedOnCompletionDate": "Adjust based on completion date",
+    "recurringEvent": "Recurring event",
+    "save" : "Save",
+    "titleCannotBeEmpty": "Title cannot be empty"
+}

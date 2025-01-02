@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_cal/calendar/calendar.dart';
+import 'package:smart_cal/calendar/notifier/calendar_notifier.dart';
 import 'package:smart_cal/core/core.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -14,27 +15,24 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  late final ValueNotifier<List<SmartEvent>> _selectedEvents;
 
   @override
   void initState() {
     super.initState();
-
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay));
   }
 
   @override
   void dispose() {
-    _selectedEvents.dispose();
     super.dispose();
   }
 
   List<SmartEvent> _getEventsForDay(DateTime day) {
-    return kEvents[day] ?? [];
+    return ref.watch(calendarNotifierProvider).kEvents[day] ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedEventsForDay = _getEventsForDay(_selectedDay);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -42,37 +40,41 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: Column(
-        children: [
-          TableCalendar<SmartEvent>(
-            firstDay: DateTime.utc(2010, 10, 16),
-            lastDay: DateTime.utc(2030, 3, 14),
-            focusedDay: _selectedDay,
-            currentDay: _focusedDay,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
-            calendarFormat: _calendarFormat,
-            onFormatChanged: (format) {
-              setState(() {
-                _calendarFormat = format;
-              });
-            },
-            eventLoader: _getEventsForDay,
-          ),
-          Expanded(
-            child: ValueListenableBuilder<List<SmartEvent>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 48),
+        child: Column(
+          children: [
+            TableCalendar<SmartEvent>(
+              firstDay: DateTime.utc(2010, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              focusedDay: _selectedDay,
+              currentDay: _focusedDay,
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              },
+              calendarFormat: _calendarFormat,
+              onFormatChanged: (format) {
+                setState(() {
+                  _calendarFormat = format;
+                });
+              },
+              eventLoader: _getEventsForDay,
+            ),
+            if (selectedEventsForDay.isEmpty)
+              const Text('No events for this day')
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: selectedEventsForDay.length,
                   itemBuilder: (context, index) {
+                    final value = selectedEventsForDay;
+
                     return Container(
                       margin: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -83,16 +85,19 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            SmartEventEditor.getRoute(event: value[index]),
+                          );
+                        },
                         title: Text('${value[index]}'),
                       ),
                     );
                   },
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
