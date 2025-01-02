@@ -5,7 +5,14 @@ import 'package:smart_cal/core/core.dart';
 
 void main() {
   late Database db;
-  db = Database('db', 'test123', e: NativeDatabase.memory());
+
+  setUp(() {
+    db = Database('db', 'test123', e: NativeDatabase.memory());
+  });
+
+  tearDown(() async {
+    await db.close();
+  });
 
   testWidgets('renders App', (tester) async {
     await tester.pumpWidget(
