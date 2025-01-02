@@ -30,7 +30,7 @@ void main() {
 
     await database.smartEventDao.insertEvent(event);
 
-    final db = database.smartEventDao.watchAllEvents();
+    final db = await database.smartEventDao.watchAllEvents().first;
 
     expect(db.length, 1);
   });
@@ -46,9 +46,9 @@ void main() {
       updatedAt: DateTime.now(), /* event properties */
     );
 
-    await database.smartEventDao.insertEvent(event);
+    await database.smartEventDao.deleteEvent(event);
 
-    final db = database.smartEventDao.watchAllEvents();
+    final db = await database.smartEventDao.watchAllEvents().first;
 
     expect(db.length, 0);
   });
