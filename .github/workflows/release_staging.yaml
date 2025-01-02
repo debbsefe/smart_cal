@@ -57,7 +57,7 @@ jobs:
           name: app-staging-release.aab
           path: build/app/outputs/bundle/stagingRelease/app-staging-release.aab
 
-      - uses: maierj/fastlane-action@v2.2.0
+      - uses: maierj/fastlane-action@v3.1.0
         name: Upload appbundle
         with:
           subdirectory: 'android/'
