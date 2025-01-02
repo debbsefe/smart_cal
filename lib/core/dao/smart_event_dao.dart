@@ -26,9 +26,4 @@ class SmartEventDao extends DatabaseAccessor<Database>
   Stream<List<SmartEvent>> watchAllEvents() {
     return select(smartEventTable).watch();
   }
-
-  Stream<List<SmartEvent>> watchEventsForDay(DateTime day) {
-    return (select(smartEventTable)..where((tbl) => tbl.date.equals(day)))
-        .watch();
-  }
 }
