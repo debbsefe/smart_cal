@@ -3,6 +3,7 @@
 import 'package:drift/drift.dart' hide JsonKey;
 import 'package:flutter/material.dart' hide Column, Table;
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:smart_cal/core/data/database/database.dart';
 
 part 'smart_event.freezed.dart';
 part 'smart_event.g.dart';
@@ -13,10 +14,10 @@ class SmartEventTable extends Table {
   TextColumn get title => text()();
   TextColumn get description => text().nullable()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get time => integer()();
+  IntColumn get time => integer().map(const TimeOfDayConverter())();
   BoolColumn get isRecurring => boolean().nullable()();
   BoolColumn get adjustBasedOnCompletion => boolean().nullable()();
-  TextColumn get recurringType => textEnum().nullable()();
+  TextColumn get recurringType => textEnum<RecurringType>().nullable()();
 
   @override
   Set<Column>? get primaryKey => {id};
@@ -78,9 +79,22 @@ class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
       _$SmartEventFromJson(json);
 
   @override
-  Map<String, Expression<Object>> toColumns(bool nullToAbsent) {
-    // TODO: implement toColumns
-    throw UnimplementedError();
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    return SmartEventTableCompanion(
+      id: Value(id),
+      title: Value(title),
+      date: Value(date),
+      time: Value(time),
+      description:
+          description == null ? const Value.absent() : Value(description),
+      isRecurring:
+          isRecurring == null ? const Value.absent() : Value(isRecurring),
+      recurringType:
+          recurringType == null ? const Value.absent() : Value(recurringType),
+      adjustBasedOnCompletion: adjustBasedOnCompletion == null
+          ? const Value.absent()
+          : Value(adjustBasedOnCompletion),
+    ).toColumns(nullToAbsent);
   }
 }
 
