@@ -8,5 +8,7 @@
     "adjustBasedOnCompletionDate": "Adjust based on completion date",
     "recurringEvent": "Recurring event",
     "save" : "Save",
-    "titleCannotBeEmpty": "Title cannot be empty"
+    "titleCannotBeEmpty": "Title cannot be empty",
+    "home": "Home",
+    "settings": "Settings"
 }
