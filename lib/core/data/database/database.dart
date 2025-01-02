@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -10,6 +9,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smart_cal/core/dao/smart_event_dao.dart';
 import 'package:smart_cal/core/model/smart_event.dart';
 import 'package:smart_cal/core/provider/support_dir_provider.dart';
+import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
+// ignore: depend_on_referenced_packages
 import 'package:sqlite3/open.dart';
 
 part 'database.g.dart';
@@ -63,10 +64,7 @@ class Database extends _$Database {
 }
 
 NativeDatabase _openDatabase(String dbPath, String password) {
-  open.overrideFor(
-    OperatingSystem.android,
-    () => DynamicLibrary.open('libsqlcipher.so'),
-  );
+  open.overrideFor(OperatingSystem.android, openCipherOnAndroid);
   return NativeDatabase(
     File(dbPath),
     setup: (rawDb) {
