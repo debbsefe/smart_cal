@@ -1,19 +1,16 @@
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logging/logging.dart';
 import 'package:smart_cal/core/core.dart';
 
 void main() {
   late Database database;
-  final log = Logger('SmartEventDaoTest');
 
   setUp(() {
-    log.fine('called');
     database = Database(
       'db',
       'test123',
-      e: NativeDatabase.memory(logStatements: true),
+      e: NativeDatabase.memory(),
     );
   });
 
