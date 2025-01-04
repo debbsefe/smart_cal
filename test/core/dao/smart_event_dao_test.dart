@@ -7,6 +7,7 @@ void main() {
   late Database database;
 
   setUp(() {
+    print('called');
     database = Database(
       'db',
       'test123',
