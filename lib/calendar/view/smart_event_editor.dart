@@ -63,6 +63,18 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.createNewEvent),
+        actions: [
+          if (widget.event != null)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                ref
+                    .watch(calendarNotifierProvider.notifier)
+                    .deleteEvent(widget.event!);
+                Navigator.of(context).pop();
+              },
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
