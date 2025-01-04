@@ -5,9 +5,6 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -15,13 +12,35 @@ on:
 jobs:
   semantic-pull-request:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
-
+    
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      flutter_channel: stable
-      min_coverage: 10
+    runs-on: ubuntu-latest
+    
+    steps:
+       - name: 📚 Git Checkout
+         uses: actions/checkout@v4
+    
+       - name: 🐦 Setup Flutter
+         uses: subosito/flutter-action@v2
+         with:
+          channel: stable
+          cache: true
 
+       - name: 📦 Install Dependencies
+         run: |
+            flutter pub global activate very_good_cli
+            very_good packages get 
+            sudo apt install sqlite3 libsqlite3-dev
+    
+       - name: ✨ Check Formatting
+         run: dart format --set-exit-if-changed lib test
+    
+       - name: 🕵️ Analyze
+         run: flutter analyze 
+    
+       - name: 🧪 Run Tests
+         run: very_good test --coverage --min-coverage 10
+    
   spell-check:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
     with:

@@ -2,13 +2,26 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:smart_cal/core/core.dart';
+import 'package:smart_cal/core/provider/support_dir_provider.dart';
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+Future<void> bootstrap(
+  FutureOr<Widget> Function(ProviderContainer container) builder,
+) async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  // Add cross-flavor configuration here
+  final supportDir = await getApplicationSupportDirectory();
 
-  runApp(await builder());
+  final container = ProviderContainer(
+    overrides: [
+      supportDirProvider.overrideWithValue(supportDir),
+    ],
+  );
+
+  runApp(await builder(container));
 }
