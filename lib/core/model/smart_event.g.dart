@@ -20,6 +20,12 @@ _$SmartEventImpl _$$SmartEventImplFromJson(Map<String, dynamic> json) =>
       recurringType:
           $enumDecodeNullable(_$RecurringTypeEnumMap, json['recurringType']),
       adjustBasedOnCompletion: json['adjustBasedOnCompletion'] as bool?,
+      deletedAt: json['deletedAt'] == null
+          ? null
+          : DateTime.parse(json['deletedAt'] as String),
+      recurringEndDateTime: json['recurringEndDateTime'] == null
+          ? null
+          : DateTime.parse(json['recurringEndDateTime'] as String),
     );
 
 Map<String, dynamic> _$$SmartEventImplToJson(_$SmartEventImpl instance) =>
@@ -34,6 +40,8 @@ Map<String, dynamic> _$$SmartEventImplToJson(_$SmartEventImpl instance) =>
       'isRecurring': instance.isRecurring,
       'recurringType': _$RecurringTypeEnumMap[instance.recurringType],
       'adjustBasedOnCompletion': instance.adjustBasedOnCompletion,
+      'deletedAt': instance.deletedAt?.toIso8601String(),
+      'recurringEndDateTime': instance.recurringEndDateTime?.toIso8601String(),
     };
 
 const _$RecurringTypeEnumMap = {

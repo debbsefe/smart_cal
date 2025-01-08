@@ -33,6 +33,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedEventsForDay = _getEventsForDay(_selectedDay);
+    final notifier = ref.watch(calendarNotifierProvider.notifier);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -64,7 +65,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   _calendarFormat = format;
                 });
               },
-              eventLoader: _getEventsForDay,
+              // ignore: unnecessary_lambdas
+              eventLoader: (day) {
+                return _getEventsForDay(day);
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+                _selectedDay = focusedDay;
+                setState(() {});
+                notifier.fetchMoreEvents(focusedDay);
+              },
             ),
             if (selectedEventsForDay.isEmpty)
               const Text('No events for this day')

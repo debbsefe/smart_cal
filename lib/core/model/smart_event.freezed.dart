@@ -31,6 +31,8 @@ mixin _$SmartEvent {
   bool? get isRecurring => throw _privateConstructorUsedError;
   RecurringType? get recurringType => throw _privateConstructorUsedError;
   bool? get adjustBasedOnCompletion => throw _privateConstructorUsedError;
+  DateTime? get deletedAt => throw _privateConstructorUsedError;
+  DateTime? get recurringEndDateTime => throw _privateConstructorUsedError;
 
   /// Serializes this SmartEvent to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,7 +60,9 @@ abstract class $SmartEventCopyWith<$Res> {
       String? description,
       bool? isRecurring,
       RecurringType? recurringType,
-      bool? adjustBasedOnCompletion});
+      bool? adjustBasedOnCompletion,
+      DateTime? deletedAt,
+      DateTime? recurringEndDateTime});
 }
 
 /// @nodoc
@@ -86,6 +90,8 @@ class _$SmartEventCopyWithImpl<$Res, $Val extends SmartEvent>
     Object? isRecurring = freezed,
     Object? recurringType = freezed,
     Object? adjustBasedOnCompletion = freezed,
+    Object? deletedAt = freezed,
+    Object? recurringEndDateTime = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -128,6 +134,14 @@ class _$SmartEventCopyWithImpl<$Res, $Val extends SmartEvent>
           ? _value.adjustBasedOnCompletion
           : adjustBasedOnCompletion // ignore: cast_nullable_to_non_nullable
               as bool?,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      recurringEndDateTime: freezed == recurringEndDateTime
+          ? _value.recurringEndDateTime
+          : recurringEndDateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -150,7 +164,9 @@ abstract class _$$SmartEventImplCopyWith<$Res>
       String? description,
       bool? isRecurring,
       RecurringType? recurringType,
-      bool? adjustBasedOnCompletion});
+      bool? adjustBasedOnCompletion,
+      DateTime? deletedAt,
+      DateTime? recurringEndDateTime});
 }
 
 /// @nodoc
@@ -176,6 +192,8 @@ class __$$SmartEventImplCopyWithImpl<$Res>
     Object? isRecurring = freezed,
     Object? recurringType = freezed,
     Object? adjustBasedOnCompletion = freezed,
+    Object? deletedAt = freezed,
+    Object? recurringEndDateTime = freezed,
   }) {
     return _then(_$SmartEventImpl(
       id: null == id
@@ -218,6 +236,14 @@ class __$$SmartEventImplCopyWithImpl<$Res>
           ? _value.adjustBasedOnCompletion
           : adjustBasedOnCompletion // ignore: cast_nullable_to_non_nullable
               as bool?,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      recurringEndDateTime: freezed == recurringEndDateTime
+          ? _value.recurringEndDateTime
+          : recurringEndDateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -235,7 +261,9 @@ class _$SmartEventImpl extends _SmartEvent {
       this.description,
       this.isRecurring,
       this.recurringType,
-      this.adjustBasedOnCompletion})
+      this.adjustBasedOnCompletion,
+      this.deletedAt,
+      this.recurringEndDateTime})
       : super._();
 
   factory _$SmartEventImpl.fromJson(Map<String, dynamic> json) =>
@@ -262,6 +290,10 @@ class _$SmartEventImpl extends _SmartEvent {
   final RecurringType? recurringType;
   @override
   final bool? adjustBasedOnCompletion;
+  @override
+  final DateTime? deletedAt;
+  @override
+  final DateTime? recurringEndDateTime;
 
   @override
   bool operator ==(Object other) {
@@ -284,7 +316,11 @@ class _$SmartEventImpl extends _SmartEvent {
                 other.recurringType == recurringType) &&
             (identical(
                     other.adjustBasedOnCompletion, adjustBasedOnCompletion) ||
-                other.adjustBasedOnCompletion == adjustBasedOnCompletion));
+                other.adjustBasedOnCompletion == adjustBasedOnCompletion) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt) &&
+            (identical(other.recurringEndDateTime, recurringEndDateTime) ||
+                other.recurringEndDateTime == recurringEndDateTime));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -300,7 +336,9 @@ class _$SmartEventImpl extends _SmartEvent {
       description,
       isRecurring,
       recurringType,
-      adjustBasedOnCompletion);
+      adjustBasedOnCompletion,
+      deletedAt,
+      recurringEndDateTime);
 
   /// Create a copy of SmartEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -329,7 +367,9 @@ abstract class _SmartEvent extends SmartEvent {
       final String? description,
       final bool? isRecurring,
       final RecurringType? recurringType,
-      final bool? adjustBasedOnCompletion}) = _$SmartEventImpl;
+      final bool? adjustBasedOnCompletion,
+      final DateTime? deletedAt,
+      final DateTime? recurringEndDateTime}) = _$SmartEventImpl;
   const _SmartEvent._() : super._();
 
   factory _SmartEvent.fromJson(Map<String, dynamic> json) =
@@ -356,6 +396,10 @@ abstract class _SmartEvent extends SmartEvent {
   RecurringType? get recurringType;
   @override
   bool? get adjustBasedOnCompletion;
+  @override
+  DateTime? get deletedAt;
+  @override
+  DateTime? get recurringEndDateTime;
 
   /// Create a copy of SmartEvent
   /// with the given fields replaced by the non-null parameter values.

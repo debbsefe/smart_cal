@@ -67,10 +67,11 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
           if (widget.event != null)
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () {
-                ref
-                    .watch(calendarNotifierProvider.notifier)
-                    .deleteEvent(widget.event!);
+              onPressed: () async {
+                await ref.watch(calendarNotifierProvider.notifier).softDelete(
+                      widget.event!.id,
+                      widget.event!.date,
+                    );
                 Navigator.of(context).pop();
               },
             ),

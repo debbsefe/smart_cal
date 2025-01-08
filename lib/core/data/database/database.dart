@@ -60,7 +60,7 @@ class Database extends _$Database {
       );
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 4;
 }
 
 NativeDatabase _openDatabase(String dbPath, String password) {

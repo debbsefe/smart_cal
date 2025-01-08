@@ -75,6 +75,18 @@ class $SmartEventTableTable extends SmartEventTable
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
       'updated_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _deletedAtMeta =
+      const VerificationMeta('deletedAt');
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+      'deleted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _recurringEndDateTimeMeta =
+      const VerificationMeta('recurringEndDateTime');
+  @override
+  late final GeneratedColumn<DateTime> recurringEndDateTime =
+      GeneratedColumn<DateTime>('recurring_end_date_time', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -86,7 +98,9 @@ class $SmartEventTableTable extends SmartEventTable
         adjustBasedOnCompletion,
         recurringType,
         createdAt,
-        updatedAt
+        updatedAt,
+        deletedAt,
+        recurringEndDateTime
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -148,6 +162,16 @@ class $SmartEventTableTable extends SmartEventTable
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
+    if (data.containsKey('deleted_at')) {
+      context.handle(_deletedAtMeta,
+          deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta));
+    }
+    if (data.containsKey('recurring_end_date_time')) {
+      context.handle(
+          _recurringEndDateTimeMeta,
+          recurringEndDateTime.isAcceptableOrUnknown(
+              data['recurring_end_date_time']!, _recurringEndDateTimeMeta));
+    }
     return context;
   }
 
@@ -180,6 +204,11 @@ class $SmartEventTableTable extends SmartEventTable
       adjustBasedOnCompletion: attachedDatabase.typeMapping.read(
           DriftSqlType.bool,
           data['${effectivePrefix}adjust_based_on_completion']),
+      deletedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}deleted_at']),
+      recurringEndDateTime: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}recurring_end_date_time']),
     );
   }
 
@@ -209,6 +238,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
   final Value<RecurringType?> recurringType;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<DateTime?> recurringEndDateTime;
   final Value<int> rowid;
   const SmartEventTableCompanion({
     this.id = const Value.absent(),
@@ -221,6 +252,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     this.recurringType = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.recurringEndDateTime = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SmartEventTableCompanion.insert({
@@ -234,6 +267,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     this.recurringType = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.recurringEndDateTime = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         title = Value(title),
@@ -252,6 +287,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     Expression<String>? recurringType,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<DateTime>? recurringEndDateTime,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -266,6 +303,9 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       if (recurringType != null) 'recurring_type': recurringType,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (recurringEndDateTime != null)
+        'recurring_end_date_time': recurringEndDateTime,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -281,6 +321,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       Value<RecurringType?>? recurringType,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt,
+      Value<DateTime?>? deletedAt,
+      Value<DateTime?>? recurringEndDateTime,
       Value<int>? rowid}) {
     return SmartEventTableCompanion(
       id: id ?? this.id,
@@ -294,6 +336,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       recurringType: recurringType ?? this.recurringType,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      recurringEndDateTime: recurringEndDateTime ?? this.recurringEndDateTime,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -335,6 +379,13 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (recurringEndDateTime.present) {
+      map['recurring_end_date_time'] =
+          Variable<DateTime>(recurringEndDateTime.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -354,6 +405,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
           ..write('recurringType: $recurringType, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('recurringEndDateTime: $recurringEndDateTime, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -385,6 +438,8 @@ typedef $$SmartEventTableTableCreateCompanionBuilder = SmartEventTableCompanion
   Value<RecurringType?> recurringType,
   required DateTime createdAt,
   required DateTime updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<DateTime?> recurringEndDateTime,
   Value<int> rowid,
 });
 typedef $$SmartEventTableTableUpdateCompanionBuilder = SmartEventTableCompanion
@@ -399,6 +454,8 @@ typedef $$SmartEventTableTableUpdateCompanionBuilder = SmartEventTableCompanion
   Value<RecurringType?> recurringType,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<DateTime?> recurringEndDateTime,
   Value<int> rowid,
 });
 
@@ -445,6 +502,13 @@ class $$SmartEventTableTableFilterComposer
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+      column: $table.deletedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get recurringEndDateTime => $composableBuilder(
+      column: $table.recurringEndDateTime,
+      builder: (column) => ColumnFilters(column));
 }
 
 class $$SmartEventTableTableOrderingComposer
@@ -487,6 +551,13 @@ class $$SmartEventTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+      column: $table.deletedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get recurringEndDateTime => $composableBuilder(
+      column: $table.recurringEndDateTime,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$SmartEventTableTableAnnotationComposer
@@ -528,6 +599,12 @@ class $$SmartEventTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get recurringEndDateTime => $composableBuilder(
+      column: $table.recurringEndDateTime, builder: (column) => column);
 }
 
 class $$SmartEventTableTableTableManager extends RootTableManager<
@@ -563,6 +640,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             Value<RecurringType?> recurringType = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
+            Value<DateTime?> deletedAt = const Value.absent(),
+            Value<DateTime?> recurringEndDateTime = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SmartEventTableCompanion(
@@ -576,6 +655,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             recurringType: recurringType,
             createdAt: createdAt,
             updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            recurringEndDateTime: recurringEndDateTime,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -589,6 +670,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             Value<RecurringType?> recurringType = const Value.absent(),
             required DateTime createdAt,
             required DateTime updatedAt,
+            Value<DateTime?> deletedAt = const Value.absent(),
+            Value<DateTime?> recurringEndDateTime = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SmartEventTableCompanion.insert(
@@ -602,6 +685,8 @@ class $$SmartEventTableTableTableManager extends RootTableManager<
             recurringType: recurringType,
             createdAt: createdAt,
             updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            recurringEndDateTime: recurringEndDateTime,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
