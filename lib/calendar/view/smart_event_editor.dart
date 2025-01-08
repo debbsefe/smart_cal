@@ -68,10 +68,10 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () async {
-                await ref.watch(calendarNotifierProvider.notifier).softDelete(
-                      widget.event!.id,
-                      widget.event!.date,
+                await ref.watch(calendarNotifierProvider.notifier).deleteEvent(
+                      widget.event!,
                     );
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
             ),
@@ -163,20 +163,39 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
             ElevatedButton(
               onPressed: () {
                 if (_titleController.text.isNotEmpty) {
-                  ref.watch(calendarNotifierProvider.notifier).saveEvent(
-                        SmartEvent(
-                          id: widget.event?.id ?? const Uuid().v4(),
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                          date: _selectedDate,
-                          time: _selectedTime,
-                          adjustBasedOnCompletion: adjustBasedOnCompletion,
-                          isRecurring: recurring,
-                          recurringType: recurringType,
-                          createdAt: widget.event?.createdAt ?? DateTime.now(),
-                          updatedAt: DateTime.now(),
-                        ),
-                      );
+                  if (widget.event != null) {
+                    // editting event
+                    ref.watch(calendarNotifierProvider.notifier).editEvent(
+                          SmartEvent(
+                            id: widget.event!.id,
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            date: _selectedDate,
+                            time: _selectedTime,
+                            adjustBasedOnCompletion: adjustBasedOnCompletion,
+                            isRecurring: recurring,
+                            recurringType: recurringType,
+                            createdAt: widget.event!.createdAt,
+                            updatedAt: DateTime.now(),
+                          ),
+                        );
+                  } else {
+                    // new event
+                    ref.watch(calendarNotifierProvider.notifier).createEvent(
+                          SmartEvent(
+                            id: const Uuid().v4(),
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            date: _selectedDate,
+                            time: _selectedTime,
+                            adjustBasedOnCompletion: adjustBasedOnCompletion,
+                            isRecurring: recurring,
+                            recurringType: recurringType,
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                          ),
+                        );
+                  }
 
                   Navigator.of(context).pop();
                 } else {

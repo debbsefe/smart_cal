@@ -48,11 +48,15 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
         .first;
   }
 
-  Future<void> saveEvent(SmartEvent event) async {
+  Future<void> createEvent(SmartEvent event) async {
     await _database.smartEventDao.insertEvent(event);
   }
 
-  Future<void> softDelete(String id, DateTime deletedAt) async {
-    await _database.smartEventDao.softDeleteEvent(id, deletedAt);
+  Future<void> editEvent(SmartEvent event) async {
+    await _database.smartEventDao.editEvent(event);
+  }
+
+  Future<void> deleteEvent(SmartEvent event) async {
+    await _database.smartEventDao.deleteEvent(event);
   }
 }
