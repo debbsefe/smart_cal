@@ -20,7 +20,7 @@ Map<String, dynamic> _$$ProgressImplToJson(_$ProgressImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'entityId': instance.entityId,
-      'status': _$ProgressStatusEnumMap[instance.status]!,
+      'status': _$ProgressStatusEnumMap[instance.status],
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'completedAt': instance.completedAt.toIso8601String(),
