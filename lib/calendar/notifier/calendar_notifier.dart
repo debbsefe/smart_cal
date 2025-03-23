@@ -19,16 +19,49 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
   final Database _database;
 
   Future<void> init() async {
-    _database.smartEventDao.watchAllEvents().listen((event) {
+    final date = state.selectedDate;
+    final startDate = DateTime(date.year, date.month, date.day - 30);
+    final endDate = DateTime(date.year, date.month, date.day + 60);
+
+    _database.smartEventDao
+        .watchEventsForDateRange(startDate: startDate, endDate: endDate)
+        .listen((event) {
       state = state.copyWith(events: event);
     });
   }
 
-  Future<void> saveEvent(SmartEvent event) async {
+  Future<void> fetchMoreEvents(DateTime date) async {
+    final startDate = DateTime(date.year, date.month, date.day - 30);
+    final endDate = DateTime(date.year, date.month, date.day + 60);
+
+    final events = await getEventsforRange(startDate, endDate);
+
+    state = state.copyWith(events: events);
+  }
+
+  Future<List<SmartEvent>> getEventsforRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    return _database.smartEventDao
+        .watchEventsForDateRange(startDate: startDate, endDate: endDate)
+        .first;
+  }
+
+  Future<void> createEvent(SmartEvent event) async {
     await _database.smartEventDao.insertEvent(event);
+  }
+
+  Future<void> editEvent(SmartEvent event) async {
+    await _database.smartEventDao.editEvent(event);
   }
 
   Future<void> deleteEvent(SmartEvent event) async {
     await _database.smartEventDao.deleteEvent(event);
+  }
+
+  void markAsCompleted(SmartEvent event) {
+    // final updatedEvent = event.copyWith(isCompleted: true);
+    editEvent(event);
   }
 }

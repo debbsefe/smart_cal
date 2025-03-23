@@ -3,11 +3,8 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart' hide Table;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:smart_cal/core/dao/smart_event_dao.dart';
-import 'package:smart_cal/core/model/smart_event.dart';
+import 'package:smart_cal/core/core.dart';
 import 'package:smart_cal/core/provider/support_dir_provider.dart';
 import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
 // ignore: depend_on_referenced_packages
@@ -37,9 +34,11 @@ final databaseProvider = Provider.autoDispose((ref) {
 @DriftDatabase(
   tables: [
     SmartEventTable,
+    ProgressTable,
   ],
   daos: [
     SmartEventDao,
+    ProgressDao,
   ],
 )
 class Database extends _$Database {
@@ -60,7 +59,7 @@ class Database extends _$Database {
       );
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 4;
 }
 
 NativeDatabase _openDatabase(String dbPath, String password) {

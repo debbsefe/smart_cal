@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_cal/app/settings/view/settings_screen.dart';
 import 'package:smart_cal/core/core.dart';
+import 'package:smart_cal/event/event.dart';
 import 'package:smart_cal/home/home.dart';
 
 class TabsAndCount {
@@ -10,7 +11,7 @@ class TabsAndCount {
   final int count;
 }
 
-enum Tabs { home, settings }
+enum Tabs { home, events, settings }
 
 final tabIndexProvider = StateProvider<TabsAndCount>((ref) => TabsAndCount());
 
@@ -28,6 +29,7 @@ class AppBottomNavigator extends ConsumerWidget {
 
   static List<Widget> pages = [
     const HomeScreen(),
+    const UpcomingEventsScreen(),
     const SettingsScreen(),
   ];
 
@@ -60,6 +62,12 @@ class AppBottomNavigator extends ConsumerWidget {
             label: l10n.home,
             icon: const Icon(
               Icons.home_outlined,
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: l10n.events,
+            icon: const Icon(
+              Icons.calendar_month,
             ),
           ),
           BottomNavigationBarItem(

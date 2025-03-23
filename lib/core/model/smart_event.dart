@@ -20,6 +20,8 @@ class SmartEventTable extends Table {
   TextColumn get recurringType => textEnum<RecurringType>().nullable()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+  DateTimeColumn get recurringEndDateTime => dateTime().nullable()();
 
   @override
   Set<Column>? get primaryKey => {id};
@@ -75,6 +77,8 @@ class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
     bool? isRecurring,
     RecurringType? recurringType,
     bool? adjustBasedOnCompletion,
+    DateTime? deletedAt,
+    DateTime? recurringEndDateTime,
   }) = _SmartEvent;
 
   const SmartEvent._();
@@ -103,6 +107,10 @@ class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
       adjustBasedOnCompletion: adjustBasedOnCompletion == null
           ? const Value.absent()
           : Value(adjustBasedOnCompletion),
+      deletedAt: deletedAt == null ? const Value.absent() : Value(deletedAt),
+      recurringEndDateTime: recurringEndDateTime == null
+          ? const Value.absent()
+          : Value(recurringEndDateTime),
     ).toColumns(nullToAbsent);
   }
 }
