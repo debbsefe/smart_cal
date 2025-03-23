@@ -1,6 +1,7 @@
 name: smart-cal-stg
 
 on:
+  pull_request:
   push:
     branches:
       - main
