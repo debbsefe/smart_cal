@@ -413,17 +413,253 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
   }
 }
 
+class $ProgressTableTable extends ProgressTable
+    with TableInfo<$ProgressTableTable, Progress> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProgressTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _entityIdMeta =
+      const VerificationMeta('entityId');
+  @override
+  late final GeneratedColumn<String> entityId = GeneratedColumn<String>(
+      'entity_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumnWithTypeConverter<ProgressStatus, String> status =
+      GeneratedColumn<String>('status', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<ProgressStatus>($ProgressTableTable.$converterstatus);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _completedAtMeta =
+      const VerificationMeta('completedAt');
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+      'completed_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, entityId, status, createdAt, updatedAt, completedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'progress_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<Progress> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('entity_id')) {
+      context.handle(_entityIdMeta,
+          entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta));
+    } else if (isInserting) {
+      context.missing(_entityIdMeta);
+    }
+    context.handle(_statusMeta, const VerificationResult.success());
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+          _completedAtMeta,
+          completedAt.isAcceptableOrUnknown(
+              data['completed_at']!, _completedAtMeta));
+    } else if (isInserting) {
+      context.missing(_completedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Progress map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Progress(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      entityId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_id'])!,
+      status: $ProgressTableTable.$converterstatus.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      completedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}completed_at'])!,
+    );
+  }
+
+  @override
+  $ProgressTableTable createAlias(String alias) {
+    return $ProgressTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ProgressStatus, String, String> $converterstatus =
+      const EnumNameConverter<ProgressStatus>(ProgressStatus.values);
+}
+
+class ProgressTableCompanion extends UpdateCompanion<Progress> {
+  final Value<String> id;
+  final Value<String> entityId;
+  final Value<ProgressStatus> status;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> completedAt;
+  final Value<int> rowid;
+  const ProgressTableCompanion({
+    this.id = const Value.absent(),
+    this.entityId = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProgressTableCompanion.insert({
+    required String id,
+    required String entityId,
+    required ProgressStatus status,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime completedAt,
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        entityId = Value(entityId),
+        status = Value(status),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt),
+        completedAt = Value(completedAt);
+  static Insertable<Progress> custom({
+    Expression<String>? id,
+    Expression<String>? entityId,
+    Expression<String>? status,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? completedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (entityId != null) 'entity_id': entityId,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProgressTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? entityId,
+      Value<ProgressStatus>? status,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt,
+      Value<DateTime>? completedAt,
+      Value<int>? rowid}) {
+    return ProgressTableCompanion(
+      id: id ?? this.id,
+      entityId: entityId ?? this.entityId,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      completedAt: completedAt ?? this.completedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (entityId.present) {
+      map['entity_id'] = Variable<String>(entityId.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(
+          $ProgressTableTable.$converterstatus.toSql(status.value));
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgressTableCompanion(')
+          ..write('id: $id, ')
+          ..write('entityId: $entityId, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
   late final $SmartEventTableTable smartEventTable =
       $SmartEventTableTable(this);
+  late final $ProgressTableTable progressTable = $ProgressTableTable(this);
   late final SmartEventDao smartEventDao = SmartEventDao(this as Database);
+  late final ProgressDao progressDao = ProgressDao(this as Database);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [smartEventTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [smartEventTable, progressTable];
 }
 
 typedef $$SmartEventTableTableCreateCompanionBuilder = SmartEventTableCompanion
@@ -708,10 +944,196 @@ typedef $$SmartEventTableTableProcessedTableManager = ProcessedTableManager<
     (SmartEvent, BaseReferences<_$Database, $SmartEventTableTable, SmartEvent>),
     SmartEvent,
     PrefetchHooks Function()>;
+typedef $$ProgressTableTableCreateCompanionBuilder = ProgressTableCompanion
+    Function({
+  required String id,
+  required String entityId,
+  required ProgressStatus status,
+  required DateTime createdAt,
+  required DateTime updatedAt,
+  required DateTime completedAt,
+  Value<int> rowid,
+});
+typedef $$ProgressTableTableUpdateCompanionBuilder = ProgressTableCompanion
+    Function({
+  Value<String> id,
+  Value<String> entityId,
+  Value<ProgressStatus> status,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime> completedAt,
+  Value<int> rowid,
+});
+
+class $$ProgressTableTableFilterComposer
+    extends Composer<_$Database, $ProgressTableTable> {
+  $$ProgressTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get entityId => $composableBuilder(
+      column: $table.entityId, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<ProgressStatus, ProgressStatus, String>
+      get status => $composableBuilder(
+          column: $table.status,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$ProgressTableTableOrderingComposer
+    extends Composer<_$Database, $ProgressTableTable> {
+  $$ProgressTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get entityId => $composableBuilder(
+      column: $table.entityId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ProgressTableTableAnnotationComposer
+    extends Composer<_$Database, $ProgressTableTable> {
+  $$ProgressTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityId =>
+      $composableBuilder(column: $table.entityId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ProgressStatus, String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => column);
+}
+
+class $$ProgressTableTableTableManager extends RootTableManager<
+    _$Database,
+    $ProgressTableTable,
+    Progress,
+    $$ProgressTableTableFilterComposer,
+    $$ProgressTableTableOrderingComposer,
+    $$ProgressTableTableAnnotationComposer,
+    $$ProgressTableTableCreateCompanionBuilder,
+    $$ProgressTableTableUpdateCompanionBuilder,
+    (Progress, BaseReferences<_$Database, $ProgressTableTable, Progress>),
+    Progress,
+    PrefetchHooks Function()> {
+  $$ProgressTableTableTableManager(_$Database db, $ProgressTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProgressTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProgressTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProgressTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> entityId = const Value.absent(),
+            Value<ProgressStatus> status = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<DateTime> completedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ProgressTableCompanion(
+            id: id,
+            entityId: entityId,
+            status: status,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            completedAt: completedAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String entityId,
+            required ProgressStatus status,
+            required DateTime createdAt,
+            required DateTime updatedAt,
+            required DateTime completedAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ProgressTableCompanion.insert(
+            id: id,
+            entityId: entityId,
+            status: status,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            completedAt: completedAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ProgressTableTableProcessedTableManager = ProcessedTableManager<
+    _$Database,
+    $ProgressTableTable,
+    Progress,
+    $$ProgressTableTableFilterComposer,
+    $$ProgressTableTableOrderingComposer,
+    $$ProgressTableTableAnnotationComposer,
+    $$ProgressTableTableCreateCompanionBuilder,
+    $$ProgressTableTableUpdateCompanionBuilder,
+    (Progress, BaseReferences<_$Database, $ProgressTableTable, Progress>),
+    Progress,
+    PrefetchHooks Function()>;
 
 class $DatabaseManager {
   final _$Database _db;
   $DatabaseManager(this._db);
   $$SmartEventTableTableTableManager get smartEventTable =>
       $$SmartEventTableTableTableManager(_db, _db.smartEventTable);
+  $$ProgressTableTableTableManager get progressTable =>
+      $$ProgressTableTableTableManager(_db, _db.progressTable);
 }

@@ -10,5 +10,6 @@
     "save" : "Save",
     "titleCannotBeEmpty": "Title cannot be empty",
     "home": "Home",
-    "settings": "Settings"
+    "settings": "Settings",
+    "events": "events"
 }

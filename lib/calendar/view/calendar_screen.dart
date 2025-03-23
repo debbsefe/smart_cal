@@ -85,28 +85,45 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   itemBuilder: (context, index) {
                     final value = selectedEventsForDay;
 
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            SmartEventEditor.getRoute(event: value[index]),
-                          );
-                        },
-                        title: Text('${value[index]}'),
-                      ),
-                    );
+                    return EventTile(event: value[index]);
                   },
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class EventTile extends ConsumerWidget {
+  const EventTile({
+    required this.event,
+    super.key,
+  });
+
+  final SmartEvent event;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 4,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            SmartEventEditor.getRoute(event: event),
+          );
+        },
+        child: ListTile(
+          title: Text('$event'),
+          trailing: Checkbox(value: true, onChanged: (value) {}),
         ),
       ),
     );

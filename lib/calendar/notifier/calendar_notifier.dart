@@ -59,4 +59,9 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
   Future<void> deleteEvent(SmartEvent event) async {
     await _database.smartEventDao.deleteEvent(event);
   }
+
+  void markAsCompleted(SmartEvent event) {
+    // final updatedEvent = event.copyWith(isCompleted: true);
+    editEvent(event);
+  }
 }
