@@ -28,7 +28,7 @@ dependencies:
   uuid: ^4.5.1
 
 dev_dependencies:
-  build_runner: ^2.4.14
+  build_runner: ^2.4.15
   drift_dev: ^2.26.0
   flutter_test:
     sdk: flutter
