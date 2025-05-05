@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   clock: ^1.1.2
-  drift: ^2.23.1
+  drift: ^2.26.1
   drift_db_viewer: ^2.1.0
   flutter:
     sdk: flutter
