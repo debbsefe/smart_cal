@@ -2,3 +2,6 @@ arb-dir: lib/core/l10n/arb
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 nullable-getter: false
+synthetic-package: false
+required-resource-attributes: false
+format: true
