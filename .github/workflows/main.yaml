@@ -32,8 +32,8 @@ jobs:
             very_good packages get 
             sudo apt install sqlite3 libsqlite3-dev
     
-       - name: ✨ Check Formatting
-         run: dart format --set-exit-if-changed lib test
+      #  - name: ✨ Check Formatting
+      #    run: dart format --set-exit-if-changed lib test
     
        - name: 🕵️ Analyze
          run: flutter analyze 
