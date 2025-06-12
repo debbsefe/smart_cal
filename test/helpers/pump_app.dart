@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smart_cal/core/l10n/l10n.dart';
+import 'package:smart_cal/core/core.dart';
 
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(Widget widget) {
