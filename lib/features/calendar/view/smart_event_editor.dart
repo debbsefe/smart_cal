@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_cal/calendar/notifier/calendar_notifier.dart';
 import 'package:smart_cal/core/core.dart';
+import 'package:smart_cal/features/calendar/notifier/calendar_notifier.dart';
 import 'package:uuid/uuid.dart';
 
 class SmartEventEditor extends ConsumerStatefulWidget {

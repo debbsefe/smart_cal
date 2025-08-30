@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_cal/calendar/calendar.dart';
+import 'package:smart_cal/features/calendar/calendar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

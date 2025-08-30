@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_cal/calendar/calendar.dart';
-import 'package:smart_cal/calendar/notifier/calendar_notifier.dart';
 import 'package:smart_cal/core/core.dart';
+import 'package:smart_cal/features/calendar/calendar.dart';
+import 'package:smart_cal/features/calendar/notifier/calendar_notifier.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
