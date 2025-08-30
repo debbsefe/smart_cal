@@ -32,7 +32,7 @@ dev_dependencies:
   drift_dev: ^2.27.0
   flutter_test:
     sdk: flutter
-  freezed: ^3.0.6
+  freezed: ^3.1.0
   json_serializable: ^6.9.5
   mocktail: ^1.0.4
   riverpod_generator: ^2.6.5
