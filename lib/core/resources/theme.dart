@@ -59,7 +59,7 @@ class CustomTheme {
         ),
       ),
       appBarTheme: const AppBarTheme(
-        color: Colors.transparent,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
       ),
