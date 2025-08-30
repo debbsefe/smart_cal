@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smart_cal/app/settings/view/settings_screen.dart';
 import 'package:smart_cal/core/core.dart';
-import 'package:smart_cal/event/event.dart';
-import 'package:smart_cal/home/home.dart';
+import 'package:smart_cal/features/app/settings/view/settings_screen.dart';
+import 'package:smart_cal/features/event/event.dart';
+import 'package:smart_cal/features/home/home.dart';
 
 class TabsAndCount {
   TabsAndCount({this.tab = Tabs.home, this.count = 0});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_cal/calendar/calendar.dart';
 import 'package:smart_cal/core/core.dart';
+import 'package:smart_cal/features/calendar/calendar.dart';
 
 final eventsForThisWeekProvider = StreamProvider<List<SmartEvent>>((ref) {
   final startDate = DateUtils.dateOnly(DateTime.now());
