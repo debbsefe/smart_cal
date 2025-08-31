@@ -55,6 +55,7 @@ unlinked_spec.ds
 **/android/app/profile
 **/android/app/release
 *.jks
+.kotlin/
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -115,3 +116,7 @@ app.*.map.json
 
 **/*service_account.json
 **/android/keystore
+
+# Firebase
+**/google-services.json
+**/GoogleService-Info.plist
