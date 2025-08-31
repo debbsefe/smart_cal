@@ -63,7 +63,10 @@ class _LocalCalendarScreenState extends ConsumerState<LocalCalendarScreen> {
         return Text(e.error.toString());
       },
       loading: (_) {
-        return const Center(child: CircularProgressIndicator());
+        return const ColoredBox(
+          color: Colors.white,
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

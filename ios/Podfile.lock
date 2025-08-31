@@ -1,18 +1,21 @@
 PODS:
+  - device_calendar (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - SQLCipher (4.8.0):
-    - SQLCipher/standard (= 4.8.0)
-  - SQLCipher/common (4.8.0)
-  - SQLCipher/standard (4.8.0):
+  - SQLCipher (4.10.0):
+    - SQLCipher/standard (= 4.10.0)
+  - SQLCipher/common (4.10.0)
+  - SQLCipher/standard (4.10.0):
     - SQLCipher/common
   - sqlcipher_flutter_libs (0.0.1):
     - Flutter
-    - SQLCipher (~> 4.8.0)
+    - SQLCipher (~> 4.10.0)
 
 DEPENDENCIES:
+  - device_calendar (from `.symlinks/plugins/device_calendar/ios`)
   - Flutter (from `Flutter`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - sqlcipher_flutter_libs (from `.symlinks/plugins/sqlcipher_flutter_libs/ios`)
@@ -22,6 +25,8 @@ SPEC REPOS:
     - SQLCipher
 
 EXTERNAL SOURCES:
+  device_calendar:
+    :path: ".symlinks/plugins/device_calendar/ios"
   Flutter:
     :path: Flutter
   path_provider_foundation:
@@ -30,11 +35,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqlcipher_flutter_libs/ios"
 
 SPEC CHECKSUMS:
+  device_calendar: b55b2c5406cfba45c95a59f9059156daee1f74ed
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  SQLCipher: 908f846ca79d74be4e1776b3b86c6ad9e6c0b04f
-  sqlcipher_flutter_libs: 30efa6a01e95c4c97aa97c9a2d0ae7d509de1c04
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
+  sqlcipher_flutter_libs: ae224763b087bffb3a5955fe295a1c460d458cb1
 
 PODFILE CHECKSUM: 9c46fd01abff66081b39f5fa5767b3f1d0b11d76
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
