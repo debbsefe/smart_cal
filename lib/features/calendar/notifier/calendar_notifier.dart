@@ -113,12 +113,12 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
 
     if (smartEvents.isNotEmpty) {
       _logger.fine(
-        'Inserting ${smartEvents.length} events from local calendar $calendarId.',
+        'Inserting ${smartEvents.length} events from localcalendar$calendarId.',
       );
       await _database.smartEventDao.bulkInsertEvent(smartEvents);
     } else {
       _logger.fine(
-        'No valid events to insert after transformation for calendar $calendarId.',
+        'No valid events to insert after map for calendar $calendarId.',
       );
     }
   }
