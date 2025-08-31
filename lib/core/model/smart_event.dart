@@ -65,7 +65,7 @@ int fromTimeOfDay(TimeOfDay timeOfDay) =>
     timeOfDay.hour * 60 + timeOfDay.minute;
 
 @freezed
-class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
+abstract class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
   const factory SmartEvent({
     required String id,
     required String title,

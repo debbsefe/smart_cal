@@ -30,7 +30,6 @@ class $SmartEventTableTable extends SmartEventTable
   late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
       'date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _timeMeta = const VerificationMeta('time');
   @override
   late final GeneratedColumnWithTypeConverter<TimeOfDay, int> time =
       GeneratedColumn<int>('time', aliasedName, false,
@@ -54,8 +53,6 @@ class $SmartEventTableTable extends SmartEventTable
           requiredDuringInsert: false,
           defaultConstraints: GeneratedColumn.constraintIsAlways(
               'CHECK ("adjust_based_on_completion" IN (0, 1))'));
-  static const VerificationMeta _recurringTypeMeta =
-      const VerificationMeta('recurringType');
   @override
   late final GeneratedColumnWithTypeConverter<RecurringType?, String>
       recurringType = GeneratedColumn<String>(
@@ -135,7 +132,6 @@ class $SmartEventTableTable extends SmartEventTable
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
-    context.handle(_timeMeta, const VerificationResult.success());
     if (data.containsKey('is_recurring')) {
       context.handle(
           _isRecurringMeta,
@@ -149,7 +145,6 @@ class $SmartEventTableTable extends SmartEventTable
               data['adjust_based_on_completion']!,
               _adjustBasedOnCompletionMeta));
     }
-    context.handle(_recurringTypeMeta, const VerificationResult.success());
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -180,7 +175,7 @@ class $SmartEventTableTable extends SmartEventTable
   @override
   SmartEvent map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return SmartEvent(
+    return SmartEvent.new(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       title: attachedDatabase.typeMapping
@@ -430,7 +425,6 @@ class $ProgressTableTable extends ProgressTable
   late final GeneratedColumn<String> entityId = GeneratedColumn<String>(
       'entity_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumnWithTypeConverter<ProgressStatus, String> status =
       GeneratedColumn<String>('status', aliasedName, false,
@@ -478,7 +472,6 @@ class $ProgressTableTable extends ProgressTable
     } else if (isInserting) {
       context.missing(_entityIdMeta);
     }
-    context.handle(_statusMeta, const VerificationResult.success());
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -507,7 +500,7 @@ class $ProgressTableTable extends ProgressTable
   @override
   Progress map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Progress(
+    return Progress.new(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       entityId: attachedDatabase.typeMapping
