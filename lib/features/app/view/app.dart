@@ -16,6 +16,7 @@ class App extends StatelessWidget {
         theme: theme.defaultThemeData(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+
         home: const AppBottomNavigator(),
       ),
     );

@@ -6,8 +6,7 @@ part of 'smart_event.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SmartEventImpl _$$SmartEventImplFromJson(Map<String, dynamic> json) =>
-    _$SmartEventImpl(
+_SmartEvent _$SmartEventFromJson(Map<String, dynamic> json) => _SmartEvent(
       id: json['id'] as String,
       title: json['title'] as String,
       date: DateTime.parse(json['date'] as String),
@@ -28,7 +27,7 @@ _$SmartEventImpl _$$SmartEventImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['recurringEndDateTime'] as String),
     );
 
-Map<String, dynamic> _$$SmartEventImplToJson(_$SmartEventImpl instance) =>
+Map<String, dynamic> _$SmartEventToJson(_SmartEvent instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
