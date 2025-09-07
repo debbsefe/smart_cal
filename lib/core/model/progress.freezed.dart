@@ -16,6 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$Progress {
   String get id;
   String get entityId;
+  @JsonKey(unknownEnumValue: ProgressStatus.none)
   ProgressStatus get status;
   DateTime get createdAt;
   DateTime get updatedAt;
@@ -67,7 +68,7 @@ abstract mixin class $ProgressCopyWith<$Res> {
   $Res call(
       {String id,
       String entityId,
-      ProgressStatus status,
+      @JsonKey(unknownEnumValue: ProgressStatus.none) ProgressStatus status,
       DateTime createdAt,
       DateTime updatedAt,
       DateTime completedAt});
@@ -214,8 +215,14 @@ extension ProgressPatterns on Progress {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String entityId, ProgressStatus status,
-            DateTime createdAt, DateTime updatedAt, DateTime completedAt)?
+    TResult Function(
+            String id,
+            String entityId,
+            @JsonKey(unknownEnumValue: ProgressStatus.none)
+            ProgressStatus status,
+            DateTime createdAt,
+            DateTime updatedAt,
+            DateTime completedAt)?
         $default, {
     required TResult orElse(),
   }) {
@@ -244,8 +251,14 @@ extension ProgressPatterns on Progress {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String entityId, ProgressStatus status,
-            DateTime createdAt, DateTime updatedAt, DateTime completedAt)
+    TResult Function(
+            String id,
+            String entityId,
+            @JsonKey(unknownEnumValue: ProgressStatus.none)
+            ProgressStatus status,
+            DateTime createdAt,
+            DateTime updatedAt,
+            DateTime completedAt)
         $default,
   ) {
     final _that = this;
@@ -272,8 +285,14 @@ extension ProgressPatterns on Progress {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String entityId, ProgressStatus status,
-            DateTime createdAt, DateTime updatedAt, DateTime completedAt)?
+    TResult? Function(
+            String id,
+            String entityId,
+            @JsonKey(unknownEnumValue: ProgressStatus.none)
+            ProgressStatus status,
+            DateTime createdAt,
+            DateTime updatedAt,
+            DateTime completedAt)?
         $default,
   ) {
     final _that = this;
@@ -293,7 +312,7 @@ class _Progress extends Progress {
   const _Progress(
       {required this.id,
       required this.entityId,
-      required this.status,
+      @JsonKey(unknownEnumValue: ProgressStatus.none) required this.status,
       required this.createdAt,
       required this.updatedAt,
       required this.completedAt})
@@ -306,6 +325,7 @@ class _Progress extends Progress {
   @override
   final String entityId;
   @override
+  @JsonKey(unknownEnumValue: ProgressStatus.none)
   final ProgressStatus status;
   @override
   final DateTime createdAt;
@@ -367,7 +387,7 @@ abstract mixin class _$ProgressCopyWith<$Res>
   $Res call(
       {String id,
       String entityId,
-      ProgressStatus status,
+      @JsonKey(unknownEnumValue: ProgressStatus.none) ProgressStatus status,
       DateTime createdAt,
       DateTime updatedAt,
       DateTime completedAt});

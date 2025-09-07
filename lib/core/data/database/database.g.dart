@@ -222,7 +222,7 @@ class $SmartEventTableTable extends SmartEventTable
   @override
   SmartEvent map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return SmartEvent.new(
+    return SmartEvent(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       title: attachedDatabase.typeMapping
@@ -606,7 +606,7 @@ class $ProgressTableTable extends ProgressTable
   @override
   Progress map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Progress.new(
+    return Progress(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       entityId: attachedDatabase.typeMapping
