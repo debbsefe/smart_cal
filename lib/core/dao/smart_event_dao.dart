@@ -12,6 +12,16 @@ class SmartEventDao extends DatabaseAccessor<Database>
     await into(smartEventTable).insertOnConflictUpdate(event);
   }
 
+  Future<void> bulkInsertEvent(List<SmartEvent> events) async {
+    await batch((batch) {
+      batch.insertAll(
+        smartEventTable,
+        events,
+        mode: InsertMode.insertOrReplace,
+      );
+    });
+  }
+
   Future<void> editEvent(SmartEvent event) async {
     final existing = await (select(smartEventTable)
           ..where((t) => t.id.equals(event.id)))

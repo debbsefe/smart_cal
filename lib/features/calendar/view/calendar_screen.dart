@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_cal/core/core.dart';
 import 'package:smart_cal/features/calendar/calendar.dart';
@@ -65,16 +66,25 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   _calendarFormat = format;
                 });
               },
-              // ignore: unnecessary_lambdas
-              eventLoader: (day) {
-                return _getEventsForDay(day);
-              },
+              eventLoader: _getEventsForDay,
               onPageChanged: (focusedDay) {
                 _focusedDay = focusedDay;
                 _selectedDay = focusedDay;
                 setState(() {});
                 notifier.fetchMoreEvents(focusedDay);
               },
+              calendarBuilders: CalendarBuilders(
+                singleMarkerBuilder: (context, date, event) {
+                  return Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: Color(event.calendarColor!),
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                },
+              ),
             ),
             if (selectedEventsForDay.isEmpty)
               const Text('No events for this day')
@@ -83,7 +93,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 child: ListView.builder(
                   itemCount: selectedEventsForDay.length,
                   itemBuilder: (context, index) {
-                    final value = selectedEventsForDay;
+                    final value = selectedEventsForDay
+                        .sortedBy((SmartEvent e) => e.startTime);
 
                     return EventTile(event: value[index]);
                   },
@@ -123,6 +134,11 @@ class EventTile extends ConsumerWidget {
         },
         child: ListTile(
           title: Text('$event'),
+          subtitle: Text(
+            '${event.startTime.format(context)} - ${event.endTime.format(
+              context,
+            )}',
+          ),
           trailing: Checkbox(value: true, onChanged: (value) {}),
         ),
       ),

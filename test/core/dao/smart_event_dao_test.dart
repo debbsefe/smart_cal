@@ -24,9 +24,13 @@ void main() {
     final endDate = startDate.add(const Duration(days: 1));
     final event = SmartEvent(
       id: '1',
+      externalEventId: '1',
       title: 'test',
       date: startDate,
-      time: TimeOfDay.now(),
+      startTime: TimeOfDay.now(),
+      endTime: TimeOfDay.fromDateTime(
+        DateTime.now().add(const Duration(hours: 1)),
+      ),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(), /* event properties */
     );
@@ -44,9 +48,13 @@ void main() {
     // Arrange
     final event = SmartEvent(
       id: '1',
+      externalEventId: '1',
       title: 'test',
       date: DateTime.now(),
-      time: TimeOfDay.now(),
+      startTime: TimeOfDay.now(),
+      endTime: TimeOfDay.fromDateTime(
+        DateTime.now().add(const Duration(hours: 1)),
+      ),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(), /* event properties */
     );

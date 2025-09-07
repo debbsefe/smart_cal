@@ -6,18 +6,20 @@ part of 'progress.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProgressImpl _$$ProgressImplFromJson(Map<String, dynamic> json) =>
-    _$ProgressImpl(
+_Progress _$ProgressFromJson(Map<String, dynamic> json) => _Progress(
       id: json['id'] as String,
       entityId: json['entityId'] as String,
-      status: $enumDecode(_$ProgressStatusEnumMap, json['status']),
+      status: $enumDecode(
+        _$ProgressStatusEnumMap,
+        json['status'],
+        unknownValue: ProgressStatus.none,
+      ),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       completedAt: DateTime.parse(json['completedAt'] as String),
     );
 
-Map<String, dynamic> _$$ProgressImplToJson(_$ProgressImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ProgressToJson(_Progress instance) => <String, dynamic>{
       'id': instance.id,
       'entityId': instance.entityId,
       'status': _$ProgressStatusEnumMap[instance.status],

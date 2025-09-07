@@ -21,10 +21,11 @@ class ProgressTable extends Table {
 }
 
 @freezed
-class Progress with _$Progress implements Insertable<Progress> {
+abstract class Progress with _$Progress implements Insertable<Progress> {
   const factory Progress({
     required String id,
     required String entityId,
+    @JsonKey(unknownEnumValue: ProgressStatus.none)
     required ProgressStatus status,
     required DateTime createdAt,
     required DateTime updatedAt,

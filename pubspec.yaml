@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   clock: ^1.1.2
+  collection: ^1.19.1
+  device_calendar: ^4.3.3
   drift: ^2.28.1
   drift_db_viewer: ^2.1.0
   flutter:
@@ -33,9 +35,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^3.1.0
-  json_serializable: ^6.9.5
+  json_serializable: ^6.11.1
   mocktail: ^1.0.4
-  riverpod_generator: ^2.6.5
   very_good_analysis: ^9.0.0
 
 flutter:

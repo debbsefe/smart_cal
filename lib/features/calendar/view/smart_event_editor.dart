@@ -23,7 +23,10 @@ class SmartEventEditor extends ConsumerStatefulWidget {
 
 class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
   DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
+  TimeOfDay _startTime = TimeOfDay.now();
+  TimeOfDay _endTime = TimeOfDay.fromDateTime(
+    DateTime.now().add(const Duration(hours: 1)),
+  );
 
   DateTime initialDate = DateTime.now();
   late DateTime firstDate =
@@ -43,7 +46,8 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
       _titleController.text = widget.event!.title;
       _descriptionController.text = widget.event!.description ?? '';
       _selectedDate = widget.event!.date;
-      _selectedTime = widget.event!.time;
+      _startTime = widget.event!.startTime;
+      _endTime = widget.event!.endTime;
       adjustBasedOnCompletion = widget.event!.adjustBasedOnCompletion;
       recurring = widget.event!.isRecurring;
       recurringType = widget.event!.recurringType;
@@ -64,7 +68,7 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
       appBar: AppBar(
         title: Text(l10n.createNewEvent),
         actions: [
-          if (widget.event != null)
+          if (widget.event != null && widget.event?.externalCalendarId == null)
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () async {
@@ -116,15 +120,34 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
               onTap: () async {
                 final time = await showTimePicker(
                   context: context,
-                  initialTime: TimeOfDay.now(),
+                  initialTime: _startTime,
                   initialEntryMode: TimePickerEntryMode.input,
                 );
-                setState(() {
-                  _selectedTime = time!;
-                });
+                if (time != null) {
+                  setState(() {
+                    _startTime = time;
+                  });
+                }
               },
               child: Text(
-                '${l10n.eventTime} ${_selectedTime.format(context)}',
+                '${l10n.startTime} ${_startTime.format(context)}',
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final time = await showTimePicker(
+                  context: context,
+                  initialTime: _endTime,
+                  initialEntryMode: TimePickerEntryMode.input,
+                );
+                if (time != null) {
+                  setState(() {
+                    _endTime = time;
+                  });
+                }
+              },
+              child: Text(
+                '${l10n.endTime} ${_endTime.format(context)}',
               ),
             ),
             SwitchListTile(
@@ -160,54 +183,62 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
                 },
                 value: recurringType,
               ),
-            ElevatedButton(
-              onPressed: () {
-                if (_titleController.text.isNotEmpty) {
-                  if (widget.event != null) {
-                    // editting event
-                    ref.watch(calendarNotifierProvider.notifier).editEvent(
-                          SmartEvent(
-                            id: widget.event!.id,
-                            title: _titleController.text,
-                            description: _descriptionController.text,
-                            date: _selectedDate,
-                            time: _selectedTime,
-                            adjustBasedOnCompletion: adjustBasedOnCompletion,
-                            isRecurring: recurring,
-                            recurringType: recurringType,
-                            createdAt: widget.event!.createdAt,
-                            updatedAt: DateTime.now(),
-                          ),
-                        );
-                  } else {
-                    // new event
-                    ref.watch(calendarNotifierProvider.notifier).createEvent(
-                          SmartEvent(
-                            id: const Uuid().v4(),
-                            title: _titleController.text,
-                            description: _descriptionController.text,
-                            date: _selectedDate,
-                            time: _selectedTime,
-                            adjustBasedOnCompletion: adjustBasedOnCompletion,
-                            isRecurring: recurring,
-                            recurringType: recurringType,
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                          ),
-                        );
-                  }
+            // only internal events can be saved
+            // external events are read-only
+            if (widget.event?.externalCalendarId == null)
+              ElevatedButton(
+                onPressed: () {
+                  if (_titleController.text.isNotEmpty) {
+                    if (widget.event != null) {
+                      // editting event
+                      ref.watch(calendarNotifierProvider.notifier).editEvent(
+                            SmartEvent(
+                              id: widget.event!.id,
+                              externalEventId: widget.event!.externalEventId,
+                              title: _titleController.text,
+                              description: _descriptionController.text,
+                              date: _selectedDate,
+                              startTime: _startTime,
+                              endTime: _endTime,
+                              adjustBasedOnCompletion: adjustBasedOnCompletion,
+                              isRecurring: recurring,
+                              recurringType: recurringType,
+                              createdAt: widget.event!.createdAt,
+                              updatedAt: DateTime.now(),
+                            ),
+                          );
+                    } else {
+                      final id = const Uuid().v4();
+                      // new event
+                      ref.watch(calendarNotifierProvider.notifier).createEvent(
+                            SmartEvent(
+                              id: id,
+                              externalEventId: id,
+                              title: _titleController.text,
+                              description: _descriptionController.text,
+                              date: _selectedDate,
+                              startTime: _startTime,
+                              endTime: _endTime,
+                              adjustBasedOnCompletion: adjustBasedOnCompletion,
+                              isRecurring: recurring,
+                              recurringType: recurringType,
+                              createdAt: DateTime.now(),
+                              updatedAt: DateTime.now(),
+                            ),
+                          );
+                    }
 
-                  Navigator.of(context).pop();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l10n.titleCannotBeEmpty),
-                    ),
-                  );
-                }
-              },
-              child: Text(l10n.save),
-            ),
+                    Navigator.of(context).pop();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.titleCannotBeEmpty),
+                      ),
+                    );
+                  }
+                },
+                child: Text(l10n.save),
+              ),
           ],
         ),
       ),

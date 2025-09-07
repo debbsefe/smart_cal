@@ -1,7 +1,7 @@
 part of 'calendar_notifier.dart';
 
 @freezed
-class CalendarState with _$CalendarState {
+abstract class CalendarState with _$CalendarState {
   factory CalendarState({
     required DateTime selectedDate,
     @Default([]) List<SmartEvent> events,
