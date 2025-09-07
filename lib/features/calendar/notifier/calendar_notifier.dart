@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -83,42 +84,81 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
     editEvent(event);
   }
 
-  Future<void> retrieveLocalCalendar(String calendarId) async {
+  Future<void> retrieveLocalCalendar(Calendar calendar) async {
     final startDate = DateTime.now().add(const Duration(days: -30));
     final endDate = DateTime.now().add(const Duration(days: 30));
     final calendarEventsResult = await _deviceCalendar.retrieveEvents(
-      calendarId,
+      calendar.id,
       RetrieveEventsParams(startDate: startDate, endDate: endDate),
     );
 
     final deviceEvents = calendarEventsResult.data;
     if (deviceEvents == null || deviceEvents.isEmpty) {
       _logger.fine(
-        'No events found in local calendar $calendarId for the given range.',
+        'No events found in local calendar ${calendar.id} for the given range.',
       );
       return;
     }
 
-    final smartEvents = deviceEvents.map((deviceEvent) {
+    final recurringEvents =
+        deviceEvents.where((event) => event.recurrenceRule != null);
+    if (recurringEvents.isNotEmpty) {
+      final groupRecurringEvents =
+          groupBy(recurringEvents, (event) => event.eventId);
+
+      final smartRecurringEvents = groupRecurringEvents.entries.map((entry) {
+        final firstEvent = entry.value.first;
+        return SmartEvent(
+          id: const Uuid().v4(),
+          externalEventId: firstEvent.eventId!,
+          externalCalendarId: calendar.id,
+          calendarColor: calendar.color,
+          title: firstEvent.title ?? 'No Title',
+          description: firstEvent.description ?? '',
+          date: firstEvent.start ?? DateTime.now(),
+          startTime: TimeOfDay.fromDateTime(firstEvent.start ?? DateTime.now()),
+          endTime: TimeOfDay.fromDateTime(firstEvent.end ?? DateTime.now()),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          isRecurring: true,
+          recurringType:
+              firstEvent.recurrenceRule?.recurrenceFrequency?.toRecurringType,
+          recurringEndDateTime: firstEvent.recurrenceRule?.endDate,
+        );
+      }).toList();
+
+      _logger.fine(
+        'Inserting ${smartRecurringEvents.length} recurring events from local '
+        'calendar ${calendar.id}.',
+      );
+      await _database.smartEventDao.bulkInsertEvent(smartRecurringEvents);
+    }
+
+    final nonRecurringEvents = deviceEvents
+        .where((deviceEvent) => deviceEvent.recurrenceRule == null)
+        .map((deviceEvent) {
       return SmartEvent(
         id: const Uuid().v4(),
+        externalEventId: deviceEvent.eventId!,
+        externalCalendarId: calendar.id,
+        calendarColor: calendar.color,
         title: deviceEvent.title ?? 'No Title',
         description: deviceEvent.description ?? '',
         date: deviceEvent.start ?? DateTime.now(),
-        time: TimeOfDay.fromDateTime(deviceEvent.start ?? DateTime.now()),
+        startTime: TimeOfDay.fromDateTime(deviceEvent.start ?? DateTime.now()),
+        endTime: TimeOfDay.fromDateTime(deviceEvent.end ?? DateTime.now()),
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
     }).toList();
 
-    if (smartEvents.isNotEmpty) {
+    if (nonRecurringEvents.isNotEmpty) {
       _logger.fine(
-        'Inserting ${smartEvents.length} events from localcalendar$calendarId.',
+        'Inserting ${nonRecurringEvents.length} events from local calendar '
+        'calendar ${calendar.id}.',
       );
-      await _database.smartEventDao.bulkInsertEvent(smartEvents);
-    } else {
-      _logger.fine(
-        'No valid events to insert after map for calendar $calendarId.',
+      await _database.smartEventDao.bulkInsertEvent(
+        nonRecurringEvents,
       );
     }
   }

@@ -18,9 +18,18 @@ mixin _$SmartEvent {
   String get title;
   DateTime get date;
   @TimeOfDayJsonConverter()
-  TimeOfDay get time;
+  TimeOfDay get startTime;
+  @TimeOfDayJsonConverter()
+  TimeOfDay get endTime;
   DateTime get createdAt;
-  DateTime get updatedAt;
+  DateTime
+      get updatedAt; // event id of an external calendar event, is the same value as id for
+// smart events created in app
+  String
+      get externalEventId; // calendar id of an external calendar event, can be null for new events,
+// created in app
+  String? get externalCalendarId;
+  int? get calendarColor;
   String? get description;
   bool? get isRecurring;
   RecurringType? get recurringType;
@@ -46,11 +55,19 @@ mixin _$SmartEvent {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.time, time) || other.time == time) &&
+            (identical(other.startTime, startTime) ||
+                other.startTime == startTime) &&
+            (identical(other.endTime, endTime) || other.endTime == endTime) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
+            (identical(other.externalEventId, externalEventId) ||
+                other.externalEventId == externalEventId) &&
+            (identical(other.externalCalendarId, externalCalendarId) ||
+                other.externalCalendarId == externalCalendarId) &&
+            (identical(other.calendarColor, calendarColor) ||
+                other.calendarColor == calendarColor) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.isRecurring, isRecurring) ||
@@ -73,9 +90,13 @@ mixin _$SmartEvent {
       id,
       title,
       date,
-      time,
+      startTime,
+      endTime,
       createdAt,
       updatedAt,
+      externalEventId,
+      externalCalendarId,
+      calendarColor,
       description,
       isRecurring,
       recurringType,
@@ -94,9 +115,13 @@ abstract mixin class $SmartEventCopyWith<$Res> {
       {String id,
       String title,
       DateTime date,
-      @TimeOfDayJsonConverter() TimeOfDay time,
+      @TimeOfDayJsonConverter() TimeOfDay startTime,
+      @TimeOfDayJsonConverter() TimeOfDay endTime,
       DateTime createdAt,
       DateTime updatedAt,
+      String externalEventId,
+      String? externalCalendarId,
+      int? calendarColor,
       String? description,
       bool? isRecurring,
       RecurringType? recurringType,
@@ -120,9 +145,13 @@ class _$SmartEventCopyWithImpl<$Res> implements $SmartEventCopyWith<$Res> {
     Object? id = null,
     Object? title = null,
     Object? date = null,
-    Object? time = null,
+    Object? startTime = null,
+    Object? endTime = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? externalEventId = null,
+    Object? externalCalendarId = freezed,
+    Object? calendarColor = freezed,
     Object? description = freezed,
     Object? isRecurring = freezed,
     Object? recurringType = freezed,
@@ -143,9 +172,13 @@ class _$SmartEventCopyWithImpl<$Res> implements $SmartEventCopyWith<$Res> {
           ? _self.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      time: null == time
-          ? _self.time
-          : time // ignore: cast_nullable_to_non_nullable
+      startTime: null == startTime
+          ? _self.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as TimeOfDay,
+      endTime: null == endTime
+          ? _self.endTime
+          : endTime // ignore: cast_nullable_to_non_nullable
               as TimeOfDay,
       createdAt: null == createdAt
           ? _self.createdAt
@@ -155,6 +188,18 @@ class _$SmartEventCopyWithImpl<$Res> implements $SmartEventCopyWith<$Res> {
           ? _self.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      externalEventId: null == externalEventId
+          ? _self.externalEventId
+          : externalEventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      externalCalendarId: freezed == externalCalendarId
+          ? _self.externalCalendarId
+          : externalCalendarId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      calendarColor: freezed == calendarColor
+          ? _self.calendarColor
+          : calendarColor // ignore: cast_nullable_to_non_nullable
+              as int?,
       description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -280,9 +325,13 @@ extension SmartEventPatterns on SmartEvent {
             String id,
             String title,
             DateTime date,
-            @TimeOfDayJsonConverter() TimeOfDay time,
+            @TimeOfDayJsonConverter() TimeOfDay startTime,
+            @TimeOfDayJsonConverter() TimeOfDay endTime,
             DateTime createdAt,
             DateTime updatedAt,
+            String externalEventId,
+            String? externalCalendarId,
+            int? calendarColor,
             String? description,
             bool? isRecurring,
             RecurringType? recurringType,
@@ -299,9 +348,13 @@ extension SmartEventPatterns on SmartEvent {
             _that.id,
             _that.title,
             _that.date,
-            _that.time,
+            _that.startTime,
+            _that.endTime,
             _that.createdAt,
             _that.updatedAt,
+            _that.externalEventId,
+            _that.externalCalendarId,
+            _that.calendarColor,
             _that.description,
             _that.isRecurring,
             _that.recurringType,
@@ -332,9 +385,13 @@ extension SmartEventPatterns on SmartEvent {
             String id,
             String title,
             DateTime date,
-            @TimeOfDayJsonConverter() TimeOfDay time,
+            @TimeOfDayJsonConverter() TimeOfDay startTime,
+            @TimeOfDayJsonConverter() TimeOfDay endTime,
             DateTime createdAt,
             DateTime updatedAt,
+            String externalEventId,
+            String? externalCalendarId,
+            int? calendarColor,
             String? description,
             bool? isRecurring,
             RecurringType? recurringType,
@@ -350,9 +407,13 @@ extension SmartEventPatterns on SmartEvent {
             _that.id,
             _that.title,
             _that.date,
-            _that.time,
+            _that.startTime,
+            _that.endTime,
             _that.createdAt,
             _that.updatedAt,
+            _that.externalEventId,
+            _that.externalCalendarId,
+            _that.calendarColor,
             _that.description,
             _that.isRecurring,
             _that.recurringType,
@@ -382,9 +443,13 @@ extension SmartEventPatterns on SmartEvent {
             String id,
             String title,
             DateTime date,
-            @TimeOfDayJsonConverter() TimeOfDay time,
+            @TimeOfDayJsonConverter() TimeOfDay startTime,
+            @TimeOfDayJsonConverter() TimeOfDay endTime,
             DateTime createdAt,
             DateTime updatedAt,
+            String externalEventId,
+            String? externalCalendarId,
+            int? calendarColor,
             String? description,
             bool? isRecurring,
             RecurringType? recurringType,
@@ -400,9 +465,13 @@ extension SmartEventPatterns on SmartEvent {
             _that.id,
             _that.title,
             _that.date,
-            _that.time,
+            _that.startTime,
+            _that.endTime,
             _that.createdAt,
             _that.updatedAt,
+            _that.externalEventId,
+            _that.externalCalendarId,
+            _that.calendarColor,
             _that.description,
             _that.isRecurring,
             _that.recurringType,
@@ -422,9 +491,13 @@ class _SmartEvent extends SmartEvent {
       {required this.id,
       required this.title,
       required this.date,
-      @TimeOfDayJsonConverter() required this.time,
+      @TimeOfDayJsonConverter() required this.startTime,
+      @TimeOfDayJsonConverter() required this.endTime,
       required this.createdAt,
       required this.updatedAt,
+      required this.externalEventId,
+      this.externalCalendarId,
+      this.calendarColor = 0xFF2196F3,
       this.description,
       this.isRecurring,
       this.recurringType,
@@ -443,11 +516,25 @@ class _SmartEvent extends SmartEvent {
   final DateTime date;
   @override
   @TimeOfDayJsonConverter()
-  final TimeOfDay time;
+  final TimeOfDay startTime;
+  @override
+  @TimeOfDayJsonConverter()
+  final TimeOfDay endTime;
   @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
+// event id of an external calendar event, is the same value as id for
+// smart events created in app
+  @override
+  final String externalEventId;
+// calendar id of an external calendar event, can be null for new events,
+// created in app
+  @override
+  final String? externalCalendarId;
+  @override
+  @JsonKey()
+  final int? calendarColor;
   @override
   final String? description;
   @override
@@ -484,11 +571,19 @@ class _SmartEvent extends SmartEvent {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.time, time) || other.time == time) &&
+            (identical(other.startTime, startTime) ||
+                other.startTime == startTime) &&
+            (identical(other.endTime, endTime) || other.endTime == endTime) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
+            (identical(other.externalEventId, externalEventId) ||
+                other.externalEventId == externalEventId) &&
+            (identical(other.externalCalendarId, externalCalendarId) ||
+                other.externalCalendarId == externalCalendarId) &&
+            (identical(other.calendarColor, calendarColor) ||
+                other.calendarColor == calendarColor) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.isRecurring, isRecurring) ||
@@ -511,9 +606,13 @@ class _SmartEvent extends SmartEvent {
       id,
       title,
       date,
-      time,
+      startTime,
+      endTime,
       createdAt,
       updatedAt,
+      externalEventId,
+      externalCalendarId,
+      calendarColor,
       description,
       isRecurring,
       recurringType,
@@ -534,9 +633,13 @@ abstract mixin class _$SmartEventCopyWith<$Res>
       {String id,
       String title,
       DateTime date,
-      @TimeOfDayJsonConverter() TimeOfDay time,
+      @TimeOfDayJsonConverter() TimeOfDay startTime,
+      @TimeOfDayJsonConverter() TimeOfDay endTime,
       DateTime createdAt,
       DateTime updatedAt,
+      String externalEventId,
+      String? externalCalendarId,
+      int? calendarColor,
       String? description,
       bool? isRecurring,
       RecurringType? recurringType,
@@ -560,9 +663,13 @@ class __$SmartEventCopyWithImpl<$Res> implements _$SmartEventCopyWith<$Res> {
     Object? id = null,
     Object? title = null,
     Object? date = null,
-    Object? time = null,
+    Object? startTime = null,
+    Object? endTime = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? externalEventId = null,
+    Object? externalCalendarId = freezed,
+    Object? calendarColor = freezed,
     Object? description = freezed,
     Object? isRecurring = freezed,
     Object? recurringType = freezed,
@@ -583,9 +690,13 @@ class __$SmartEventCopyWithImpl<$Res> implements _$SmartEventCopyWith<$Res> {
           ? _self.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      time: null == time
-          ? _self.time
-          : time // ignore: cast_nullable_to_non_nullable
+      startTime: null == startTime
+          ? _self.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as TimeOfDay,
+      endTime: null == endTime
+          ? _self.endTime
+          : endTime // ignore: cast_nullable_to_non_nullable
               as TimeOfDay,
       createdAt: null == createdAt
           ? _self.createdAt
@@ -595,6 +706,18 @@ class __$SmartEventCopyWithImpl<$Res> implements _$SmartEventCopyWith<$Res> {
           ? _self.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      externalEventId: null == externalEventId
+          ? _self.externalEventId
+          : externalEventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      externalCalendarId: freezed == externalCalendarId
+          ? _self.externalCalendarId
+          : externalCalendarId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      calendarColor: freezed == calendarColor
+          ? _self.calendarColor
+          : calendarColor // ignore: cast_nullable_to_non_nullable
+              as int?,
       description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable

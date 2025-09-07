@@ -11,5 +11,7 @@
     "titleCannotBeEmpty": "Title cannot be empty",
     "home": "Home",
     "settings": "Settings",
-    "events": "events"
+    "events": "events",
+    "startTime": "Start Time",
+    "endTime": "End Time"
 }

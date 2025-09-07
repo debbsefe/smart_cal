@@ -165,6 +165,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'events'**
   String get events;
+
+  /// No description provided for @startTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Time'**
+  String get startTime;
+
+  /// No description provided for @endTime.
+  ///
+  /// In en, this message translates to:
+  /// **'End Time'**
+  String get endTime;
 }
 
 class _AppLocalizationsDelegate

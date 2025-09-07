@@ -45,13 +45,16 @@ class _LocalCalendarScreenState extends ConsumerState<LocalCalendarScreen> {
           ),
           body: Column(
             children: calendars.value?.map((e) {
+                  if (e.id == null) {
+                    return const SizedBox.shrink();
+                  }
                   return ListTile(
                     title: Text(e.name ?? ''),
                     subtitle: Text(e.accountType ?? ''),
                     onTap: () {
                       ref
                           .read(calendarNotifierProvider.notifier)
-                          .retrieveLocalCalendar(e.id ?? '');
+                          .retrieveLocalCalendar(e);
                     },
                   );
                 }).toList() ??
@@ -65,7 +68,7 @@ class _LocalCalendarScreenState extends ConsumerState<LocalCalendarScreen> {
       loading: (_) {
         return const ColoredBox(
           color: Colors.white,
-          child: CircularProgressIndicator(),
+          child: Center(child: CircularProgressIndicator()),
         );
       },
     );

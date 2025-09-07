@@ -14,7 +14,11 @@ class SmartEventDao extends DatabaseAccessor<Database>
 
   Future<void> bulkInsertEvent(List<SmartEvent> events) async {
     await batch((batch) {
-      batch.insertAll(smartEventTable, events);
+      batch.insertAll(
+        smartEventTable,
+        events,
+        mode: InsertMode.insertOrReplace,
+      );
     });
   }
 
