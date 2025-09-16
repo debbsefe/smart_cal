@@ -5,6 +5,10 @@ class CustomTheme {
   ThemeData defaultThemeData() {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
+      primaryColor: const Color(0xFF1976d2),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF1976d2),
+      ),
       textTheme: GoogleFonts.robotoTextTheme(),
       bottomSheetTheme: const BottomSheetThemeData(
         shape: RoundedRectangleBorder(
@@ -68,6 +72,13 @@ class CustomTheme {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         enabledBorder: OutlineInputBorder(),
         focusedBorder: OutlineInputBorder(),
+      ),
+      cardTheme: CardThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 1,
+        margin: const EdgeInsets.all(8),
       ),
     );
   }

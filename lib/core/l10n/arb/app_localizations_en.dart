@@ -43,4 +43,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get events => 'events';
+
+  @override
+  String get startTime => 'Start Time';
+
+  @override
+  String get endTime => 'End Time';
 }

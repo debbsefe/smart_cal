@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'package:device_calendar/device_calendar.dart';
 import 'package:drift/drift.dart' hide JsonKey;
 import 'package:flutter/material.dart' hide Column, Table;
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -14,7 +15,8 @@ class SmartEventTable extends Table {
   TextColumn get title => text()();
   TextColumn get description => text().nullable()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get time => integer().map(const TimeOfDayConverter())();
+  IntColumn get startTime => integer().map(const TimeOfDayConverter())();
+  IntColumn get endTime => integer().map(const TimeOfDayConverter())();
   BoolColumn get isRecurring => boolean().nullable()();
   BoolColumn get adjustBasedOnCompletion => boolean().nullable()();
   TextColumn get recurringType => textEnum<RecurringType>().nullable()();
@@ -22,9 +24,12 @@ class SmartEventTable extends Table {
   DateTimeColumn get updatedAt => dateTime()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
   DateTimeColumn get recurringEndDateTime => dateTime().nullable()();
+  TextColumn get externalCalendarId => text().nullable()();
+  TextColumn get externalEventId => text()();
+  IntColumn get calendarColor => integer().nullable()();
 
   @override
-  Set<Column>? get primaryKey => {id};
+  Set<Column>? get primaryKey => {externalEventId};
 }
 
 class TimeOfDayConverter extends TypeConverter<TimeOfDay, int> {
@@ -65,14 +70,22 @@ int fromTimeOfDay(TimeOfDay timeOfDay) =>
     timeOfDay.hour * 60 + timeOfDay.minute;
 
 @freezed
-class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
+abstract class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
   const factory SmartEvent({
     required String id,
     required String title,
     required DateTime date,
-    @TimeOfDayJsonConverter() required TimeOfDay time,
+    @TimeOfDayJsonConverter() required TimeOfDay startTime,
+    @TimeOfDayJsonConverter() required TimeOfDay endTime,
     required DateTime createdAt,
     required DateTime updatedAt,
+    // event id of an external calendar event, is the same value as id for
+    // smart events created in app
+    required String externalEventId,
+    // calendar id of an external calendar event, can be null for new events,
+    // created in app
+    String? externalCalendarId,
+    @Default(0xFF2196F3) int? calendarColor,
     String? description,
     bool? isRecurring,
     RecurringType? recurringType,
@@ -95,22 +108,19 @@ class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
       id: Value(id),
       title: Value(title),
       date: Value(date),
-      time: Value(time),
+      startTime: Value(startTime),
+      endTime: Value(endTime),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
-      description:
-          description == null ? const Value.absent() : Value(description),
-      isRecurring:
-          isRecurring == null ? const Value.absent() : Value(isRecurring),
-      recurringType:
-          recurringType == null ? const Value.absent() : Value(recurringType),
-      adjustBasedOnCompletion: adjustBasedOnCompletion == null
-          ? const Value.absent()
-          : Value(adjustBasedOnCompletion),
-      deletedAt: deletedAt == null ? const Value.absent() : Value(deletedAt),
-      recurringEndDateTime: recurringEndDateTime == null
-          ? const Value.absent()
-          : Value(recurringEndDateTime),
+      externalEventId: Value(externalEventId),
+      externalCalendarId: Value(externalCalendarId),
+      calendarColor: Value(calendarColor),
+      description: Value(description),
+      isRecurring: Value(isRecurring),
+      recurringType: Value(recurringType),
+      adjustBasedOnCompletion: Value(adjustBasedOnCompletion),
+      deletedAt: Value(deletedAt),
+      recurringEndDateTime: Value(recurringEndDateTime),
     ).toColumns(nullToAbsent);
   }
 }
@@ -124,4 +134,19 @@ enum RecurringType {
   weekly,
   monthly,
   yearly,
+}
+
+extension RecurrenceFrequencyExtension on RecurrenceFrequency {
+  RecurringType get toRecurringType {
+    switch (this) {
+      case RecurrenceFrequency.Daily:
+        return RecurringType.daily;
+      case RecurrenceFrequency.Weekly:
+        return RecurringType.weekly;
+      case RecurrenceFrequency.Monthly:
+        return RecurringType.monthly;
+      case RecurrenceFrequency.Yearly:
+        return RecurringType.yearly;
+    }
+  }
 }

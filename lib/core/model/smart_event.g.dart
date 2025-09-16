@@ -6,15 +6,19 @@ part of 'smart_event.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SmartEventImpl _$$SmartEventImplFromJson(Map<String, dynamic> json) =>
-    _$SmartEventImpl(
+_SmartEvent _$SmartEventFromJson(Map<String, dynamic> json) => _SmartEvent(
       id: json['id'] as String,
       title: json['title'] as String,
       date: DateTime.parse(json['date'] as String),
-      time: const TimeOfDayJsonConverter()
-          .fromJson((json['time'] as num).toInt()),
+      startTime: const TimeOfDayJsonConverter()
+          .fromJson((json['startTime'] as num).toInt()),
+      endTime: const TimeOfDayJsonConverter()
+          .fromJson((json['endTime'] as num).toInt()),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      externalEventId: json['externalEventId'] as String,
+      externalCalendarId: json['externalCalendarId'] as String?,
+      calendarColor: (json['calendarColor'] as num?)?.toInt() ?? 0xFF2196F3,
       description: json['description'] as String?,
       isRecurring: json['isRecurring'] as bool?,
       recurringType:
@@ -28,14 +32,18 @@ _$SmartEventImpl _$$SmartEventImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['recurringEndDateTime'] as String),
     );
 
-Map<String, dynamic> _$$SmartEventImplToJson(_$SmartEventImpl instance) =>
+Map<String, dynamic> _$SmartEventToJson(_SmartEvent instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'date': instance.date.toIso8601String(),
-      'time': const TimeOfDayJsonConverter().toJson(instance.time),
+      'startTime': const TimeOfDayJsonConverter().toJson(instance.startTime),
+      'endTime': const TimeOfDayJsonConverter().toJson(instance.endTime),
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
+      'externalEventId': instance.externalEventId,
+      'externalCalendarId': instance.externalCalendarId,
+      'calendarColor': instance.calendarColor,
       'description': instance.description,
       'isRecurring': instance.isRecurring,
       'recurringType': _$RecurringTypeEnumMap[instance.recurringType],
