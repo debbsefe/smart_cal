@@ -84,7 +84,7 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
     editEvent(event);
   }
 
-  Future<void> retrieveLocalCalendar(Calendar calendar) async {
+  Future<void> syncLocalCalendar(Calendar calendar) async {
     final startDate = DateTime.now().add(const Duration(days: -30));
     final endDate = DateTime.now().add(const Duration(days: 30));
     final calendarEventsResult = await _deviceCalendar.retrieveEvents(
@@ -99,66 +99,114 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
       );
       return;
     }
+    await _insertRecurringEventsInDB(deviceEvents, calendar);
+    await _insertNonRecurringEventsInDB(deviceEvents, calendar);
+  }
 
+  Future<void> _insertRecurringEventsInDB(
+    List<Event> deviceEvents,
+    Calendar calendar,
+  ) async {
     final recurringEvents =
         deviceEvents.where((event) => event.recurrenceRule != null);
+
+    final smartRecurringEvents = <SmartEvent>[];
+
     if (recurringEvents.isNotEmpty) {
       final groupRecurringEvents =
           groupBy(recurringEvents, (event) => event.eventId);
 
-      final smartRecurringEvents = groupRecurringEvents.entries.map((entry) {
+      for (final entry in groupRecurringEvents.entries) {
+        if (entry.value.isEmpty) {
+          _logger.severe(
+            'Skipping empty recurring event group for eventId: ${entry.key}',
+          );
+          continue;
+        }
         final firstEvent = entry.value.first;
-        return SmartEvent(
-          id: const Uuid().v4(),
-          externalEventId: firstEvent.eventId!,
-          externalCalendarId: calendar.id,
-          calendarColor: calendar.color,
-          title: firstEvent.title ?? 'No Title',
-          description: firstEvent.description ?? '',
-          date: firstEvent.start ?? DateTime.now(),
-          startTime: TimeOfDay.fromDateTime(firstEvent.start ?? DateTime.now()),
-          endTime: TimeOfDay.fromDateTime(firstEvent.end ?? DateTime.now()),
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          isRecurring: true,
-          recurringType:
-              firstEvent.recurrenceRule?.recurrenceFrequency?.toRecurringType,
-          recurringEndDateTime: firstEvent.recurrenceRule?.endDate,
+        if (firstEvent.eventId == null ||
+            firstEvent.start == null ||
+            firstEvent.end == null) {
+          _logger.severe(
+            'Skipping recurring event with missing data: ${firstEvent.title}',
+          );
+          continue;
+        }
+        smartRecurringEvents.add(
+          SmartEvent(
+            id: const Uuid().v4(),
+            externalEventId: firstEvent.eventId!,
+            externalCalendarId: calendar.id,
+            calendarColor: calendar.color,
+            title: firstEvent.title ?? 'No Title',
+            description: firstEvent.description ?? '',
+            date: firstEvent.start ?? DateTime.now(),
+            startTime:
+                TimeOfDay.fromDateTime(firstEvent.start ?? DateTime.now()),
+            endTime: TimeOfDay.fromDateTime(firstEvent.end ?? DateTime.now()),
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+            isRecurring: true,
+            recurringType:
+                firstEvent.recurrenceRule?.recurrenceFrequency?.toRecurringType,
+            recurringEndDateTime: firstEvent.recurrenceRule?.endDate,
+          ),
         );
-      }).toList();
+      }
 
       _logger.fine(
         'Inserting ${smartRecurringEvents.length} recurring events from local '
-        'calendar ${calendar.id}.',
+        'calendar ${calendar.name}.',
       );
       await _database.smartEventDao.bulkInsertEvent(smartRecurringEvents);
     }
+  }
 
+  Future<void> _insertNonRecurringEventsInDB(
+    List<Event> deviceEvents,
+    Calendar calendar,
+  ) async {
     final nonRecurringEvents = deviceEvents
         .where((deviceEvent) => deviceEvent.recurrenceRule == null)
-        .map((deviceEvent) {
-      return SmartEvent(
-        id: const Uuid().v4(),
-        externalEventId: deviceEvent.eventId!,
-        externalCalendarId: calendar.id,
-        calendarColor: calendar.color,
-        title: deviceEvent.title ?? 'No Title',
-        description: deviceEvent.description ?? '',
-        date: deviceEvent.start ?? DateTime.now(),
-        startTime: TimeOfDay.fromDateTime(deviceEvent.start ?? DateTime.now()),
-        endTime: TimeOfDay.fromDateTime(deviceEvent.end ?? DateTime.now()),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-    }).toList();
+        .toList();
 
-    if (nonRecurringEvents.isNotEmpty) {
+    final smartNonRecurringEvents = <SmartEvent>[];
+
+    for (final deviceEvent in nonRecurringEvents) {
+      if (deviceEvent.eventId == null ||
+          deviceEvent.start == null ||
+          deviceEvent.end == null) {
+        _logger.severe(
+          'Skipping non-recurring event with missing data: '
+          '${deviceEvent.title}',
+        );
+        return;
+      }
+
+      smartNonRecurringEvents.add(
+        SmartEvent(
+          id: const Uuid().v4(),
+          externalEventId: deviceEvent.eventId!,
+          externalCalendarId: calendar.id,
+          calendarColor: calendar.color,
+          title: deviceEvent.title ?? 'No Title',
+          description: deviceEvent.description ?? '',
+          date: deviceEvent.start ?? DateTime.now(),
+          startTime:
+              TimeOfDay.fromDateTime(deviceEvent.start ?? DateTime.now()),
+          endTime: TimeOfDay.fromDateTime(deviceEvent.end ?? DateTime.now()),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+    }
+    if (smartNonRecurringEvents.isNotEmpty) {
       _logger.fine(
-        'Inserting ${nonRecurringEvents.length} events from local calendar '
-        'calendar ${calendar.id}.',
+        'Inserting ${smartNonRecurringEvents.length} non recurring events from '
+        'local calendar ${calendar.name}.',
       );
       await _database.smartEventDao.bulkInsertEvent(
-        nonRecurringEvents,
+        smartNonRecurringEvents,
       );
     }
   }

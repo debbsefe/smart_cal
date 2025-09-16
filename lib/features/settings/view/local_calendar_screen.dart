@@ -54,7 +54,7 @@ class _LocalCalendarScreenState extends ConsumerState<LocalCalendarScreen> {
                     onTap: () {
                       ref
                           .read(calendarNotifierProvider.notifier)
-                          .retrieveLocalCalendar(e);
+                          .syncLocalCalendar(e);
                     },
                   );
                 }).toList() ??

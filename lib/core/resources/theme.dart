@@ -5,9 +5,9 @@ class CustomTheme {
   ThemeData defaultThemeData() {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
-      primaryColor: const Color(0x001976d2),
+      primaryColor: const Color(0xFF1976d2),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0x001976d2),
+        seedColor: const Color(0xFF1976d2),
       ),
       textTheme: GoogleFonts.robotoTextTheme(),
       bottomSheetTheme: const BottomSheetThemeData(

@@ -79,7 +79,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     width: 7,
                     height: 7,
                     decoration: BoxDecoration(
-                      color: Color(event.calendarColor!),
+                      color: Color(event.calendarColor ?? 0xFF2196F3),
                       shape: BoxShape.circle,
                     ),
                   );
