@@ -7,30 +7,34 @@ part of 'smart_event.dart';
 // **************************************************************************
 
 _SmartEvent _$SmartEventFromJson(Map<String, dynamic> json) => _SmartEvent(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      date: DateTime.parse(json['date'] as String),
-      startTime: const TimeOfDayJsonConverter()
-          .fromJson((json['startTime'] as num).toInt()),
-      endTime: const TimeOfDayJsonConverter()
-          .fromJson((json['endTime'] as num).toInt()),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      externalEventId: json['externalEventId'] as String,
-      externalCalendarId: json['externalCalendarId'] as String?,
-      calendarColor: (json['calendarColor'] as num?)?.toInt() ?? 0xFF2196F3,
-      description: json['description'] as String?,
-      isRecurring: json['isRecurring'] as bool?,
-      recurringType:
-          $enumDecodeNullable(_$RecurringTypeEnumMap, json['recurringType']),
-      adjustBasedOnCompletion: json['adjustBasedOnCompletion'] as bool?,
-      deletedAt: json['deletedAt'] == null
-          ? null
-          : DateTime.parse(json['deletedAt'] as String),
-      recurringEndDateTime: json['recurringEndDateTime'] == null
-          ? null
-          : DateTime.parse(json['recurringEndDateTime'] as String),
-    );
+  id: json['id'] as String,
+  title: json['title'] as String,
+  date: DateTime.parse(json['date'] as String),
+  startTime: const TimeOfDayJsonConverter().fromJson(
+    (json['startTime'] as num).toInt(),
+  ),
+  endTime: const TimeOfDayJsonConverter().fromJson(
+    (json['endTime'] as num).toInt(),
+  ),
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+  externalEventId: json['externalEventId'] as String,
+  externalCalendarId: json['externalCalendarId'] as String?,
+  calendarColor: (json['calendarColor'] as num?)?.toInt() ?? 0xFF2196F3,
+  description: json['description'] as String?,
+  isRecurring: json['isRecurring'] as bool?,
+  recurringType: $enumDecodeNullable(
+    _$RecurringTypeEnumMap,
+    json['recurringType'],
+  ),
+  adjustBasedOnCompletion: json['adjustBasedOnCompletion'] as bool?,
+  deletedAt: json['deletedAt'] == null
+      ? null
+      : DateTime.parse(json['deletedAt'] as String),
+  recurringEndDateTime: json['recurringEndDateTime'] == null
+      ? null
+      : DateTime.parse(json['recurringEndDateTime'] as String),
+);
 
 Map<String, dynamic> _$SmartEventToJson(_SmartEvent instance) =>
     <String, dynamic>{

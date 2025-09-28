@@ -129,12 +129,7 @@ final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
 final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
 
-enum RecurringType {
-  daily,
-  weekly,
-  monthly,
-  yearly,
-}
+enum RecurringType { daily, weekly, monthly, yearly }
 
 extension RecurrenceFrequencyExtension on RecurrenceFrequency {
   RecurringType get toRecurringType {
