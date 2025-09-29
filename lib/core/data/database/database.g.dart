@@ -3,6 +3,74 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
+mixin $SmartEventTableTableToColumns implements Insertable<SmartEvent> {
+  String get id;
+  String get title;
+  String? get description;
+  DateTime get date;
+  TimeOfDay get startTime;
+  TimeOfDay get endTime;
+  bool? get isRecurring;
+  bool? get adjustBasedOnCompletion;
+  RecurringType? get recurringType;
+  DateTime get createdAt;
+  DateTime get updatedAt;
+  DateTime? get deletedAt;
+  DateTime? get recurringEndDateTime;
+  String? get externalCalendarId;
+  String get externalEventId;
+  int? get calendarColor;
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['title'] = Variable<String>(title);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['date'] = Variable<DateTime>(date);
+    {
+      map['start_time'] = Variable<int>(
+        $SmartEventTableTable.$converterstartTime.toSql(startTime),
+      );
+    }
+    {
+      map['end_time'] = Variable<int>(
+        $SmartEventTableTable.$converterendTime.toSql(endTime),
+      );
+    }
+    if (!nullToAbsent || isRecurring != null) {
+      map['is_recurring'] = Variable<bool>(isRecurring);
+    }
+    if (!nullToAbsent || adjustBasedOnCompletion != null) {
+      map['adjust_based_on_completion'] = Variable<bool>(
+        adjustBasedOnCompletion,
+      );
+    }
+    if (!nullToAbsent || recurringType != null) {
+      map['recurring_type'] = Variable<String>(
+        $SmartEventTableTable.$converterrecurringTypen.toSql(recurringType),
+      );
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    if (!nullToAbsent || recurringEndDateTime != null) {
+      map['recurring_end_date_time'] = Variable<DateTime>(recurringEndDateTime);
+    }
+    if (!nullToAbsent || externalCalendarId != null) {
+      map['external_calendar_id'] = Variable<String>(externalCalendarId);
+    }
+    map['external_event_id'] = Variable<String>(externalEventId);
+    if (!nullToAbsent || calendarColor != null) {
+      map['calendar_color'] = Variable<int>(calendarColor);
+    }
+    return map;
+  }
+}
+
 class $SmartEventTableTable extends SmartEventTable
     with TableInfo<$SmartEventTableTable, SmartEvent> {
   @override
@@ -663,6 +731,30 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
   }
 }
 
+mixin $ProgressTableTableToColumns implements Insertable<Progress> {
+  String get id;
+  String get entityId;
+  ProgressStatus get status;
+  DateTime get createdAt;
+  DateTime get updatedAt;
+  DateTime get completedAt;
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['entity_id'] = Variable<String>(entityId);
+    {
+      map['status'] = Variable<String>(
+        $ProgressTableTable.$converterstatus.toSql(status),
+      );
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['completed_at'] = Variable<DateTime>(completedAt);
+    return map;
+  }
+}
+
 class $ProgressTableTable extends ProgressTable
     with TableInfo<$ProgressTableTable, Progress> {
   @override
@@ -839,12 +931,18 @@ class $ProgressTableTable extends ProgressTable
       const EnumNameConverter<ProgressStatus>(ProgressStatus.values);
 }
 
-class Progress extends DataClass implements Insertable<Progress> {
+class Progress extends DataClass with $ProgressTableTableToColumns {
+  @override
   final String id;
+  @override
   final String entityId;
+  @override
   final ProgressStatus status;
+  @override
   final DateTime createdAt;
+  @override
   final DateTime updatedAt;
+  @override
   final DateTime completedAt;
   const Progress({
     required this.id,
@@ -854,22 +952,6 @@ class Progress extends DataClass implements Insertable<Progress> {
     required this.updatedAt,
     required this.completedAt,
   });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['entity_id'] = Variable<String>(entityId);
-    {
-      map['status'] = Variable<String>(
-        $ProgressTableTable.$converterstatus.toSql(status),
-      );
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    map['completed_at'] = Variable<DateTime>(completedAt);
-    return map;
-  }
-
   ProgressTableCompanion toCompanion(bool nullToAbsent) {
     return ProgressTableCompanion(
       id: Value(id),

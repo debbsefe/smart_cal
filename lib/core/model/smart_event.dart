@@ -70,7 +70,9 @@ int fromTimeOfDay(TimeOfDay timeOfDay) =>
     timeOfDay.hour * 60 + timeOfDay.minute;
 
 @freezed
-abstract class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
+abstract class SmartEvent
+    with _$SmartEvent, $SmartEventTableTableToColumns
+    implements Insertable<SmartEvent> {
   const factory SmartEvent({
     required String id,
     required String title,
@@ -101,28 +103,6 @@ abstract class SmartEvent with _$SmartEvent implements Insertable<SmartEvent> {
 
   @override
   String toString() => title;
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    return SmartEventTableCompanion(
-      id: Value(id),
-      title: Value(title),
-      date: Value(date),
-      startTime: Value(startTime),
-      endTime: Value(endTime),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-      externalEventId: Value(externalEventId),
-      externalCalendarId: Value(externalCalendarId),
-      calendarColor: Value(calendarColor),
-      description: Value(description),
-      isRecurring: Value(isRecurring),
-      recurringType: Value(recurringType),
-      adjustBasedOnCompletion: Value(adjustBasedOnCompletion),
-      deletedAt: Value(deletedAt),
-      recurringEndDateTime: Value(recurringEndDateTime),
-    ).toColumns(nullToAbsent);
-  }
 }
 
 final kToday = DateTime.now();
