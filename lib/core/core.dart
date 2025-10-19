@@ -1,4 +1,5 @@
 export 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:flutter_riverpod/legacy.dart';
 export 'package:logging/logging.dart';
 
 export 'dao/dao.dart';
