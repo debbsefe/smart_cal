@@ -1,14 +1,16 @@
 import 'package:smart_cal/core/core.dart';
 
-final tabNotifierProvider =
-    NotifierProvider<TabNotifier, TabsAndCount>(TabNotifier.new);
+final tabNotifierProvider = NotifierProvider<TabNotifier, TabsAndCount>(
+  TabNotifier.new,
+);
 
 class TabNotifier extends Notifier<TabsAndCount> {
   @override
   TabsAndCount build() => TabsAndCount();
 
-  @override
-  set state(TabsAndCount newState) => super.state = newState;
+  void updateTabAndCount(TabsAndCount newState) {
+    state = newState;
+  }
 }
 
 class TabsAndCount {

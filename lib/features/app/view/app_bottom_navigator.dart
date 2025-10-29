@@ -30,10 +30,7 @@ class AppBottomNavigator extends ConsumerWidget {
     final activeIndex = activeTab.tab.index;
 
     return Scaffold(
-      body: IndexedStack(
-        index: activeIndex,
-        children: pages,
-      ),
+      body: IndexedStack(index: activeIndex, children: pages),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: activeIndex,
         showSelectedLabels: false,
@@ -42,29 +39,27 @@ class AppBottomNavigator extends ConsumerWidget {
         backgroundColor: Colors.white,
         onTap: (int index) {
           final count = index == activeIndex ? 1 : 0;
-          ref.read(tabNotifierProvider.notifier).state = TabsAndCount(
-            tab: Tabs.values[index],
-            count: activeTab.count + count,
-          );
+          ref
+              .read(tabNotifierProvider.notifier)
+              .updateTabAndCount(
+                TabsAndCount(
+                  tab: Tabs.values[index],
+                  count: activeTab.count + count,
+                ),
+              );
         },
         items: [
           BottomNavigationBarItem(
             label: l10n.home,
-            icon: const Icon(
-              Icons.home_outlined,
-            ),
+            icon: const Icon(Icons.home_outlined),
           ),
           BottomNavigationBarItem(
             label: l10n.events,
-            icon: const Icon(
-              Icons.calendar_month,
-            ),
+            icon: const Icon(Icons.calendar_month),
           ),
           BottomNavigationBarItem(
             label: l10n.settings,
-            icon: const Icon(
-              Icons.settings_outlined,
-            ),
+            icon: const Icon(Icons.settings_outlined),
           ),
         ],
       ),
