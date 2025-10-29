@@ -29,13 +29,9 @@ class CalendarNotifier extends Notifier<CalendarState> {
   CalendarState build() {
     _database = ref.watch(databaseProvider);
     _deviceCalendar = ref.watch(deviceCalenderProvider);
-    final selectedState = DateTime.now();
-
-    final initialState = CalendarState(selectedDate: DateTime.now());
-
-    init(selectedState);
-
-    return initialState;
+    final now = DateTime.now();
+    init(now);
+    return CalendarState(selectedDate: now);
   }
 
   Future<void> init(DateTime date) async {

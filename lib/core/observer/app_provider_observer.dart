@@ -8,7 +8,7 @@ base class AppProviderObserver extends ProviderObserver {
     ProviderObserverContext context,
     Object? value,
   ) {
-    logger.info('$Provider added: $value');
+    logger.info('${context.provider.name} added: $value');
     super.didAddProvider(context, value);
   }
 
