@@ -16,29 +16,25 @@ final deviceCalenderProvider = Provider<DeviceCalendarPlugin>((ref) {
 });
 
 final calendarNotifierProvider =
-    StateNotifierProvider.autoDispose<CalendarNotifier, CalendarState>(
-  (ref) {
-    final deviceCalendar = ref.watch(deviceCalenderProvider);
-    return CalendarNotifier(
-      database: ref.watch(databaseProvider),
-      deviceCalendar: deviceCalendar,
-    )..init();
-  },
+    NotifierProvider.autoDispose<CalendarNotifier, CalendarState>(
+  CalendarNotifier.new,
 );
 
-class CalendarNotifier extends StateNotifier<CalendarState> {
-  CalendarNotifier({
-    required Database database,
-    required DeviceCalendarPlugin deviceCalendar,
-  })  : _database = database,
-        _deviceCalendar = deviceCalendar,
-        super(CalendarState(selectedDate: DateTime.now()));
-  final Database _database;
-  final DeviceCalendarPlugin _deviceCalendar;
+class CalendarNotifier extends Notifier<CalendarState> {
+  late final Database _database;
+  late final DeviceCalendarPlugin _deviceCalendar;
   final _logger = Logger('CalendarNotifier');
 
-  Future<void> init() async {
-    final date = state.selectedDate;
+  @override
+  CalendarState build() {
+    _database = ref.watch(databaseProvider);
+    _deviceCalendar = ref.watch(deviceCalenderProvider);
+    final now = DateTime.now();
+    init(now);
+    return CalendarState(selectedDate: now);
+  }
+
+  Future<void> init(DateTime date) async {
     final startDate = DateTime(date.year, date.month, date.day - 30);
     final endDate = DateTime(date.year, date.month, date.day + 60);
 

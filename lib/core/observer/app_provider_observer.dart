@@ -1,35 +1,32 @@
 import 'package:smart_cal/core/core.dart';
 
-class AppProviderObserver extends ProviderObserver {
+base class AppProviderObserver extends ProviderObserver {
   final logger = Logger('AppProviderObserver');
 
   @override
   void didAddProvider(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object? value,
-    ProviderContainer container,
   ) {
-    logger.info('$Provider added: $value');
-    super.didAddProvider(provider, value, container);
+    logger.info('${context.provider.name} added: $value');
+    super.didAddProvider(context, value);
   }
 
   @override
   void didDisposeProvider(
-    ProviderBase<Object?> provider,
-    ProviderContainer container,
+    ProviderObserverContext context,
   ) {
-    logger.info('$Provider disposed');
-    super.didDisposeProvider(provider, container);
+    logger.info('${context.provider.name} disposed');
+    super.didDisposeProvider(context);
   }
 
   @override
   void providerDidFail(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object error,
     StackTrace stackTrace,
-    ProviderContainer container,
   ) {
-    logger.info('$Provider threw $error');
-    super.providerDidFail(provider, error, stackTrace, container);
+    logger.info('${context.provider.name} threw $error');
+    super.providerDidFail(context, error, stackTrace);
   }
 }
