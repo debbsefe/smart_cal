@@ -19,9 +19,9 @@ abstract class CalendarState with _$CalendarState {
     final map = <DateTime, List<SmartEvent>>{};
     for (final event in events) {
       final key = DateTime.utc(
-        event.date.year,
-        event.date.month,
-        event.date.day,
+        event.start.year,
+        event.start.month,
+        event.start.day,
       );
       if (map.containsKey(key)) {
         map[key]!.add(event);

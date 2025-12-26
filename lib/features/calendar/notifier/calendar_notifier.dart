@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:device_calendar/device_calendar.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:smart_cal/core/core.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -17,8 +16,8 @@ final deviceCalenderProvider = Provider<DeviceCalendarPlugin>((ref) {
 
 final calendarNotifierProvider =
     NotifierProvider.autoDispose<CalendarNotifier, CalendarState>(
-  CalendarNotifier.new,
-);
+      CalendarNotifier.new,
+    );
 
 class CalendarNotifier extends Notifier<CalendarState> {
   late final Database _database;
@@ -41,8 +40,8 @@ class CalendarNotifier extends Notifier<CalendarState> {
     _database.smartEventDao
         .watchEventsForDateRange(startDate: startDate, endDate: endDate)
         .listen((event) {
-      state = state.copyWith(events: event);
-    });
+          state = state.copyWith(events: event);
+        });
   }
 
   Future<void> fetchMoreEvents(DateTime date) async {
@@ -103,14 +102,17 @@ class CalendarNotifier extends Notifier<CalendarState> {
     List<Event> deviceEvents,
     Calendar calendar,
   ) async {
-    final recurringEvents =
-        deviceEvents.where((event) => event.recurrenceRule != null);
+    final recurringEvents = deviceEvents.where(
+      (event) => event.recurrenceRule != null,
+    );
 
     final smartRecurringEvents = <SmartEvent>[];
 
     if (recurringEvents.isNotEmpty) {
-      final groupRecurringEvents =
-          groupBy(recurringEvents, (event) => event.eventId);
+      final groupRecurringEvents = groupBy(
+        recurringEvents,
+        (event) => event.eventId,
+      );
 
       for (final entry in groupRecurringEvents.entries) {
         if (entry.value.isEmpty) {
@@ -136,10 +138,8 @@ class CalendarNotifier extends Notifier<CalendarState> {
             calendarColor: calendar.color,
             title: firstEvent.title ?? 'No Title',
             description: firstEvent.description ?? '',
-            date: firstEvent.start ?? DateTime.now(),
-            startTime:
-                TimeOfDay.fromDateTime(firstEvent.start ?? DateTime.now()),
-            endTime: TimeOfDay.fromDateTime(firstEvent.end ?? DateTime.now()),
+            start: firstEvent.start ?? DateTime.now(),
+            end: firstEvent.end ?? DateTime.now(),
             createdAt: DateTime.now(),
             updatedAt: DateTime.now(),
             isRecurring: true,
@@ -187,10 +187,8 @@ class CalendarNotifier extends Notifier<CalendarState> {
           calendarColor: calendar.color,
           title: deviceEvent.title ?? 'No Title',
           description: deviceEvent.description ?? '',
-          date: deviceEvent.start ?? DateTime.now(),
-          startTime:
-              TimeOfDay.fromDateTime(deviceEvent.start ?? DateTime.now()),
-          endTime: TimeOfDay.fromDateTime(deviceEvent.end ?? DateTime.now()),
+          start: deviceEvent.start ?? DateTime.now(),
+          end: deviceEvent.end ?? DateTime.now(),
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
@@ -201,9 +199,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
         'Inserting ${smartNonRecurringEvents.length} non recurring events from '
         'local calendar ${calendar.name}.',
       );
-      await _database.smartEventDao.bulkInsertEvent(
-        smartNonRecurringEvents,
-      );
+      await _database.smartEventDao.bulkInsertEvent(smartNonRecurringEvents);
     }
   }
 }
