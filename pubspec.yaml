@@ -25,7 +25,7 @@ dependencies:
   path_provider: ^2.1.5
   riverpod_annotation: ^3.0.3
   sqlcipher_flutter_libs: ^0.6.8
-  sqlite3: ^2.9.3
+  sqlite3: ^2.9.4
   table_calendar: ^3.2.0
   uuid: ^4.5.1
 
