@@ -38,33 +38,24 @@ class $SmartEventTableTable extends SmartEventTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  static const VerificationMeta _startMeta = const VerificationMeta('start');
   @override
-  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-    'date',
+  late final GeneratedColumn<DateTime> start = GeneratedColumn<DateTime>(
+    'start',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _endMeta = const VerificationMeta('end');
   @override
-  late final GeneratedColumnWithTypeConverter<TimeOfDay, int> startTime =
-      GeneratedColumn<int>(
-        'start_time',
-        aliasedName,
-        false,
-        type: DriftSqlType.int,
-        requiredDuringInsert: true,
-      ).withConverter<TimeOfDay>($SmartEventTableTable.$converterstartTime);
-  @override
-  late final GeneratedColumnWithTypeConverter<TimeOfDay, int> endTime =
-      GeneratedColumn<int>(
-        'end_time',
-        aliasedName,
-        false,
-        type: DriftSqlType.int,
-        requiredDuringInsert: true,
-      ).withConverter<TimeOfDay>($SmartEventTableTable.$converterendTime);
+  late final GeneratedColumn<DateTime> end = GeneratedColumn<DateTime>(
+    'end',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _isRecurringMeta = const VerificationMeta(
     'isRecurring',
   );
@@ -182,14 +173,36 @@ class $SmartEventTableTable extends SmartEventTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _allDayMeta = const VerificationMeta('allDay');
+  @override
+  late final GeneratedColumn<bool> allDay = GeneratedColumn<bool>(
+    'all_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("all_day" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _locationMeta = const VerificationMeta(
+    'location',
+  );
+  @override
+  late final GeneratedColumn<String> location = GeneratedColumn<String>(
+    'location',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     title,
     description,
-    date,
-    startTime,
-    endTime,
+    start,
+    end,
     isRecurring,
     adjustBasedOnCompletion,
     recurringType,
@@ -200,6 +213,8 @@ class $SmartEventTableTable extends SmartEventTable
     externalCalendarId,
     externalEventId,
     calendarColor,
+    allDay,
+    location,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -235,13 +250,21 @@ class $SmartEventTableTable extends SmartEventTable
         ),
       );
     }
-    if (data.containsKey('date')) {
+    if (data.containsKey('start')) {
       context.handle(
-        _dateMeta,
-        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+        _startMeta,
+        start.isAcceptableOrUnknown(data['start']!, _startMeta),
       );
     } else if (isInserting) {
-      context.missing(_dateMeta);
+      context.missing(_startMeta);
+    }
+    if (data.containsKey('end')) {
+      context.handle(
+        _endMeta,
+        end.isAcceptableOrUnknown(data['end']!, _endMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endMeta);
     }
     if (data.containsKey('is_recurring')) {
       context.handle(
@@ -321,6 +344,18 @@ class $SmartEventTableTable extends SmartEventTable
         ),
       );
     }
+    if (data.containsKey('all_day')) {
+      context.handle(
+        _allDayMeta,
+        allDay.isAcceptableOrUnknown(data['all_day']!, _allDayMeta),
+      );
+    }
+    if (data.containsKey('location')) {
+      context.handle(
+        _locationMeta,
+        location.isAcceptableOrUnknown(data['location']!, _locationMeta),
+      );
+    }
     return context;
   }
 
@@ -338,22 +373,14 @@ class $SmartEventTableTable extends SmartEventTable
         DriftSqlType.string,
         data['${effectivePrefix}title'],
       )!,
-      date: attachedDatabase.typeMapping.read(
+      start: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}date'],
+        data['${effectivePrefix}start'],
       )!,
-      startTime: $SmartEventTableTable.$converterstartTime.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}start_time'],
-        )!,
-      ),
-      endTime: $SmartEventTableTable.$converterendTime.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}end_time'],
-        )!,
-      ),
+      end: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -366,6 +393,14 @@ class $SmartEventTableTable extends SmartEventTable
         DriftSqlType.string,
         data['${effectivePrefix}external_event_id'],
       )!,
+      allDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}all_day'],
+      ),
+      location: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}location'],
+      ),
       externalCalendarId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}external_calendar_id'],
@@ -408,10 +443,6 @@ class $SmartEventTableTable extends SmartEventTable
     return $SmartEventTableTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<TimeOfDay, int> $converterstartTime =
-      const TimeOfDayConverter();
-  static TypeConverter<TimeOfDay, int> $converterendTime =
-      const TimeOfDayConverter();
   static JsonTypeConverter2<RecurringType, String, String>
   $converterrecurringType = const EnumNameConverter<RecurringType>(
     RecurringType.values,
@@ -426,9 +457,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
   final Value<String> id;
   final Value<String> title;
   final Value<String?> description;
-  final Value<DateTime> date;
-  final Value<TimeOfDay> startTime;
-  final Value<TimeOfDay> endTime;
+  final Value<DateTime> start;
+  final Value<DateTime> end;
   final Value<bool?> isRecurring;
   final Value<bool?> adjustBasedOnCompletion;
   final Value<RecurringType?> recurringType;
@@ -439,14 +469,15 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
   final Value<String?> externalCalendarId;
   final Value<String> externalEventId;
   final Value<int?> calendarColor;
+  final Value<bool?> allDay;
+  final Value<String?> location;
   final Value<int> rowid;
   const SmartEventTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
-    this.date = const Value.absent(),
-    this.startTime = const Value.absent(),
-    this.endTime = const Value.absent(),
+    this.start = const Value.absent(),
+    this.end = const Value.absent(),
     this.isRecurring = const Value.absent(),
     this.adjustBasedOnCompletion = const Value.absent(),
     this.recurringType = const Value.absent(),
@@ -457,15 +488,16 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     this.externalCalendarId = const Value.absent(),
     this.externalEventId = const Value.absent(),
     this.calendarColor = const Value.absent(),
+    this.allDay = const Value.absent(),
+    this.location = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SmartEventTableCompanion.insert({
     required String id,
     required String title,
     this.description = const Value.absent(),
-    required DateTime date,
-    required TimeOfDay startTime,
-    required TimeOfDay endTime,
+    required DateTime start,
+    required DateTime end,
     this.isRecurring = const Value.absent(),
     this.adjustBasedOnCompletion = const Value.absent(),
     this.recurringType = const Value.absent(),
@@ -476,12 +508,13 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     this.externalCalendarId = const Value.absent(),
     required String externalEventId,
     this.calendarColor = const Value.absent(),
+    this.allDay = const Value.absent(),
+    this.location = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
-       date = Value(date),
-       startTime = Value(startTime),
-       endTime = Value(endTime),
+       start = Value(start),
+       end = Value(end),
        createdAt = Value(createdAt),
        updatedAt = Value(updatedAt),
        externalEventId = Value(externalEventId);
@@ -489,9 +522,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     Expression<String>? id,
     Expression<String>? title,
     Expression<String>? description,
-    Expression<DateTime>? date,
-    Expression<int>? startTime,
-    Expression<int>? endTime,
+    Expression<DateTime>? start,
+    Expression<DateTime>? end,
     Expression<bool>? isRecurring,
     Expression<bool>? adjustBasedOnCompletion,
     Expression<String>? recurringType,
@@ -502,15 +534,16 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     Expression<String>? externalCalendarId,
     Expression<String>? externalEventId,
     Expression<int>? calendarColor,
+    Expression<bool>? allDay,
+    Expression<String>? location,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
-      if (date != null) 'date': date,
-      if (startTime != null) 'start_time': startTime,
-      if (endTime != null) 'end_time': endTime,
+      if (start != null) 'start': start,
+      if (end != null) 'end': end,
       if (isRecurring != null) 'is_recurring': isRecurring,
       if (adjustBasedOnCompletion != null)
         'adjust_based_on_completion': adjustBasedOnCompletion,
@@ -524,6 +557,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
         'external_calendar_id': externalCalendarId,
       if (externalEventId != null) 'external_event_id': externalEventId,
       if (calendarColor != null) 'calendar_color': calendarColor,
+      if (allDay != null) 'all_day': allDay,
+      if (location != null) 'location': location,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -532,9 +567,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     Value<String>? id,
     Value<String>? title,
     Value<String?>? description,
-    Value<DateTime>? date,
-    Value<TimeOfDay>? startTime,
-    Value<TimeOfDay>? endTime,
+    Value<DateTime>? start,
+    Value<DateTime>? end,
     Value<bool?>? isRecurring,
     Value<bool?>? adjustBasedOnCompletion,
     Value<RecurringType?>? recurringType,
@@ -545,15 +579,16 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     Value<String?>? externalCalendarId,
     Value<String>? externalEventId,
     Value<int?>? calendarColor,
+    Value<bool?>? allDay,
+    Value<String?>? location,
     Value<int>? rowid,
   }) {
     return SmartEventTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      date: date ?? this.date,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
+      start: start ?? this.start,
+      end: end ?? this.end,
       isRecurring: isRecurring ?? this.isRecurring,
       adjustBasedOnCompletion:
           adjustBasedOnCompletion ?? this.adjustBasedOnCompletion,
@@ -565,6 +600,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
       externalCalendarId: externalCalendarId ?? this.externalCalendarId,
       externalEventId: externalEventId ?? this.externalEventId,
       calendarColor: calendarColor ?? this.calendarColor,
+      allDay: allDay ?? this.allDay,
+      location: location ?? this.location,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -581,18 +618,11 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
-    if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
+    if (start.present) {
+      map['start'] = Variable<DateTime>(start.value);
     }
-    if (startTime.present) {
-      map['start_time'] = Variable<int>(
-        $SmartEventTableTable.$converterstartTime.toSql(startTime.value),
-      );
-    }
-    if (endTime.present) {
-      map['end_time'] = Variable<int>(
-        $SmartEventTableTable.$converterendTime.toSql(endTime.value),
-      );
+    if (end.present) {
+      map['end'] = Variable<DateTime>(end.value);
     }
     if (isRecurring.present) {
       map['is_recurring'] = Variable<bool>(isRecurring.value);
@@ -632,6 +662,12 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
     if (calendarColor.present) {
       map['calendar_color'] = Variable<int>(calendarColor.value);
     }
+    if (allDay.present) {
+      map['all_day'] = Variable<bool>(allDay.value);
+    }
+    if (location.present) {
+      map['location'] = Variable<String>(location.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -644,9 +680,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
-          ..write('date: $date, ')
-          ..write('startTime: $startTime, ')
-          ..write('endTime: $endTime, ')
+          ..write('start: $start, ')
+          ..write('end: $end, ')
           ..write('isRecurring: $isRecurring, ')
           ..write('adjustBasedOnCompletion: $adjustBasedOnCompletion, ')
           ..write('recurringType: $recurringType, ')
@@ -657,6 +692,8 @@ class SmartEventTableCompanion extends UpdateCompanion<SmartEvent> {
           ..write('externalCalendarId: $externalCalendarId, ')
           ..write('externalEventId: $externalEventId, ')
           ..write('calendarColor: $calendarColor, ')
+          ..write('allDay: $allDay, ')
+          ..write('location: $location, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -978,9 +1015,8 @@ typedef $$SmartEventTableTableCreateCompanionBuilder =
       required String id,
       required String title,
       Value<String?> description,
-      required DateTime date,
-      required TimeOfDay startTime,
-      required TimeOfDay endTime,
+      required DateTime start,
+      required DateTime end,
       Value<bool?> isRecurring,
       Value<bool?> adjustBasedOnCompletion,
       Value<RecurringType?> recurringType,
@@ -991,6 +1027,8 @@ typedef $$SmartEventTableTableCreateCompanionBuilder =
       Value<String?> externalCalendarId,
       required String externalEventId,
       Value<int?> calendarColor,
+      Value<bool?> allDay,
+      Value<String?> location,
       Value<int> rowid,
     });
 typedef $$SmartEventTableTableUpdateCompanionBuilder =
@@ -998,9 +1036,8 @@ typedef $$SmartEventTableTableUpdateCompanionBuilder =
       Value<String> id,
       Value<String> title,
       Value<String?> description,
-      Value<DateTime> date,
-      Value<TimeOfDay> startTime,
-      Value<TimeOfDay> endTime,
+      Value<DateTime> start,
+      Value<DateTime> end,
       Value<bool?> isRecurring,
       Value<bool?> adjustBasedOnCompletion,
       Value<RecurringType?> recurringType,
@@ -1011,6 +1048,8 @@ typedef $$SmartEventTableTableUpdateCompanionBuilder =
       Value<String?> externalCalendarId,
       Value<String> externalEventId,
       Value<int?> calendarColor,
+      Value<bool?> allDay,
+      Value<String?> location,
       Value<int> rowid,
     });
 
@@ -1038,22 +1077,15 @@ class $$SmartEventTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
+  ColumnFilters<DateTime> get start => $composableBuilder(
+    column: $table.start,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<TimeOfDay, TimeOfDay, int> get startTime =>
-      $composableBuilder(
-        column: $table.startTime,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnWithTypeConverterFilters<TimeOfDay, TimeOfDay, int> get endTime =>
-      $composableBuilder(
-        column: $table.endTime,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
+  ColumnFilters<DateTime> get end => $composableBuilder(
+    column: $table.end,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get isRecurring => $composableBuilder(
     column: $table.isRecurring,
@@ -1105,6 +1137,16 @@ class $$SmartEventTableTableFilterComposer
     column: $table.calendarColor,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<bool> get allDay => $composableBuilder(
+    column: $table.allDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$SmartEventTableTableOrderingComposer
@@ -1131,18 +1173,13 @@ class $$SmartEventTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get date => $composableBuilder(
-    column: $table.date,
+  ColumnOrderings<DateTime> get start => $composableBuilder(
+    column: $table.start,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get startTime => $composableBuilder(
-    column: $table.startTime,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get endTime => $composableBuilder(
-    column: $table.endTime,
+  ColumnOrderings<DateTime> get end => $composableBuilder(
+    column: $table.end,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1195,6 +1232,16 @@ class $$SmartEventTableTableOrderingComposer
     column: $table.calendarColor,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get allDay => $composableBuilder(
+    column: $table.allDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SmartEventTableTableAnnotationComposer
@@ -1217,14 +1264,11 @@ class $$SmartEventTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get date =>
-      $composableBuilder(column: $table.date, builder: (column) => column);
+  GeneratedColumn<DateTime> get start =>
+      $composableBuilder(column: $table.start, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<TimeOfDay, int> get startTime =>
-      $composableBuilder(column: $table.startTime, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<TimeOfDay, int> get endTime =>
-      $composableBuilder(column: $table.endTime, builder: (column) => column);
+  GeneratedColumn<DateTime> get end =>
+      $composableBuilder(column: $table.end, builder: (column) => column);
 
   GeneratedColumn<bool> get isRecurring => $composableBuilder(
     column: $table.isRecurring,
@@ -1270,6 +1314,12 @@ class $$SmartEventTableTableAnnotationComposer
     column: $table.calendarColor,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get allDay =>
+      $composableBuilder(column: $table.allDay, builder: (column) => column);
+
+  GeneratedColumn<String> get location =>
+      $composableBuilder(column: $table.location, builder: (column) => column);
 }
 
 class $$SmartEventTableTableTableManager
@@ -1306,9 +1356,8 @@ class $$SmartEventTableTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String?> description = const Value.absent(),
-                Value<DateTime> date = const Value.absent(),
-                Value<TimeOfDay> startTime = const Value.absent(),
-                Value<TimeOfDay> endTime = const Value.absent(),
+                Value<DateTime> start = const Value.absent(),
+                Value<DateTime> end = const Value.absent(),
                 Value<bool?> isRecurring = const Value.absent(),
                 Value<bool?> adjustBasedOnCompletion = const Value.absent(),
                 Value<RecurringType?> recurringType = const Value.absent(),
@@ -1319,14 +1368,15 @@ class $$SmartEventTableTableTableManager
                 Value<String?> externalCalendarId = const Value.absent(),
                 Value<String> externalEventId = const Value.absent(),
                 Value<int?> calendarColor = const Value.absent(),
+                Value<bool?> allDay = const Value.absent(),
+                Value<String?> location = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SmartEventTableCompanion(
                 id: id,
                 title: title,
                 description: description,
-                date: date,
-                startTime: startTime,
-                endTime: endTime,
+                start: start,
+                end: end,
                 isRecurring: isRecurring,
                 adjustBasedOnCompletion: adjustBasedOnCompletion,
                 recurringType: recurringType,
@@ -1337,6 +1387,8 @@ class $$SmartEventTableTableTableManager
                 externalCalendarId: externalCalendarId,
                 externalEventId: externalEventId,
                 calendarColor: calendarColor,
+                allDay: allDay,
+                location: location,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -1344,9 +1396,8 @@ class $$SmartEventTableTableTableManager
                 required String id,
                 required String title,
                 Value<String?> description = const Value.absent(),
-                required DateTime date,
-                required TimeOfDay startTime,
-                required TimeOfDay endTime,
+                required DateTime start,
+                required DateTime end,
                 Value<bool?> isRecurring = const Value.absent(),
                 Value<bool?> adjustBasedOnCompletion = const Value.absent(),
                 Value<RecurringType?> recurringType = const Value.absent(),
@@ -1357,14 +1408,15 @@ class $$SmartEventTableTableTableManager
                 Value<String?> externalCalendarId = const Value.absent(),
                 required String externalEventId,
                 Value<int?> calendarColor = const Value.absent(),
+                Value<bool?> allDay = const Value.absent(),
+                Value<String?> location = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SmartEventTableCompanion.insert(
                 id: id,
                 title: title,
                 description: description,
-                date: date,
-                startTime: startTime,
-                endTime: endTime,
+                start: start,
+                end: end,
                 isRecurring: isRecurring,
                 adjustBasedOnCompletion: adjustBasedOnCompletion,
                 recurringType: recurringType,
@@ -1375,6 +1427,8 @@ class $$SmartEventTableTableTableManager
                 externalCalendarId: externalCalendarId,
                 externalEventId: externalEventId,
                 calendarColor: calendarColor,
+                allDay: allDay,
+                location: location,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

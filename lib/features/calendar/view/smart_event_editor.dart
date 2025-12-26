@@ -22,15 +22,13 @@ class SmartEventEditor extends ConsumerStatefulWidget {
 }
 
 class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _startTime = TimeOfDay.now();
-  TimeOfDay _endTime = TimeOfDay.fromDateTime(
-    DateTime.now().add(const Duration(hours: 1)),
-  );
+  DateTime _start = DateTime.now();
+  DateTime _end = DateTime.now().add(const Duration(hours: 1));
 
   DateTime initialDate = DateTime.now();
-  late DateTime firstDate =
-      DateTime.now().subtract(const Duration(days: 36525));
+  late DateTime firstDate = DateTime.now().subtract(
+    const Duration(days: 36525),
+  );
   DateTime lastDate = DateTime.now().add(const Duration(days: 36525));
 
   bool? adjustBasedOnCompletion;
@@ -45,9 +43,8 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
     if (widget.event != null) {
       _titleController.text = widget.event!.title;
       _descriptionController.text = widget.event!.description ?? '';
-      _selectedDate = widget.event!.date;
-      _startTime = widget.event!.startTime;
-      _endTime = widget.event!.endTime;
+      _start = widget.event!.start;
+      _end = widget.event!.end;
       adjustBasedOnCompletion = widget.event!.adjustBasedOnCompletion;
       recurring = widget.event!.isRecurring;
       recurringType = widget.event!.recurringType;
@@ -64,6 +61,9 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final startTime = TimeOfDay.fromDateTime(_start);
+    final endTime = TimeOfDay.fromDateTime(_end);
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.createNewEvent),
@@ -72,9 +72,9 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () async {
-                await ref.watch(calendarNotifierProvider.notifier).deleteEvent(
-                      widget.event!,
-                    );
+                await ref
+                    .watch(calendarNotifierProvider.notifier)
+                    .deleteEvent(widget.event!);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
@@ -88,16 +88,12 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
           children: [
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(
-                labelText: l10n.eventTitle,
-              ),
+              decoration: InputDecoration(labelText: l10n.eventTitle),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: l10n.eventDescription,
-              ),
+              decoration: InputDecoration(labelText: l10n.eventDescription),
             ),
             GestureDetector(
               onTap: () async {
@@ -107,48 +103,64 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
                   firstDate: firstDate,
                   lastDate: lastDate,
                 );
-                setState(() {
-                  _selectedDate = date!;
-                });
+                if (date != null) {
+                  setState(() {
+                    _start = DateTime(
+                      date.year,
+                      date.month,
+                      date.day,
+                      _start.hour,
+                      _start.minute,
+                    );
+                  });
+                }
               },
               child: Text(
                 '${l10n.eventDate}: '
-                '${DateFormat.yMMMMd().format(_selectedDate)}',
+                '${DateFormat.yMMMMd().format(_start)}',
               ),
             ),
             GestureDetector(
               onTap: () async {
                 final time = await showTimePicker(
                   context: context,
-                  initialTime: _startTime,
+                  initialTime: startTime,
                   initialEntryMode: TimePickerEntryMode.input,
                 );
                 if (time != null) {
                   setState(() {
-                    _startTime = time;
+                    _start = DateTime(
+                      _start.year,
+                      _start.month,
+                      _start.day,
+                      time.hour,
+                      time.minute,
+                    );
                   });
                 }
               },
-              child: Text(
-                '${l10n.startTime} ${_startTime.format(context)}',
-              ),
+              child: Text('${l10n.startTime} ${startTime.format(context)}'),
             ),
             GestureDetector(
               onTap: () async {
                 final time = await showTimePicker(
                   context: context,
-                  initialTime: _endTime,
+                  initialTime: endTime,
                   initialEntryMode: TimePickerEntryMode.input,
                 );
                 if (time != null) {
                   setState(() {
-                    _endTime = time;
+                    _end = DateTime(
+                      _end.year,
+                      _end.month,
+                      _end.day,
+                      time.hour,
+                      time.minute,
+                    );
                   });
                 }
               },
-              child: Text(
-                '${l10n.endTime} ${_endTime.format(context)}',
-              ),
+              child: Text('${l10n.endTime} ${endTime.format(context)}'),
             ),
             SwitchListTile(
               value: adjustBasedOnCompletion ?? false,
@@ -191,15 +203,16 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
                   if (_titleController.text.isNotEmpty) {
                     if (widget.event != null) {
                       // editting event
-                      ref.watch(calendarNotifierProvider.notifier).editEvent(
+                      ref
+                          .watch(calendarNotifierProvider.notifier)
+                          .editEvent(
                             SmartEvent(
                               id: widget.event!.id,
                               externalEventId: widget.event!.externalEventId,
                               title: _titleController.text,
                               description: _descriptionController.text,
-                              date: _selectedDate,
-                              startTime: _startTime,
-                              endTime: _endTime,
+                              start: _start,
+                              end: _end,
                               adjustBasedOnCompletion: adjustBasedOnCompletion,
                               isRecurring: recurring,
                               recurringType: recurringType,
@@ -210,15 +223,16 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
                     } else {
                       final id = const Uuid().v4();
                       // new event
-                      ref.watch(calendarNotifierProvider.notifier).createEvent(
+                      ref
+                          .watch(calendarNotifierProvider.notifier)
+                          .createEvent(
                             SmartEvent(
                               id: id,
                               externalEventId: id,
                               title: _titleController.text,
                               description: _descriptionController.text,
-                              date: _selectedDate,
-                              startTime: _startTime,
-                              endTime: _endTime,
+                              start: _start,
+                              end: _end,
                               adjustBasedOnCompletion: adjustBasedOnCompletion,
                               isRecurring: recurring,
                               recurringType: recurringType,
@@ -231,9 +245,7 @@ class _SmartEventEditorState extends ConsumerState<SmartEventEditor> {
                     Navigator.of(context).pop();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(l10n.titleCannotBeEmpty),
-                      ),
+                      SnackBar(content: Text(l10n.titleCannotBeEmpty)),
                     );
                   }
                 },

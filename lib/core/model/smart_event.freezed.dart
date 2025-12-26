@@ -15,9 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SmartEvent {
 
- String get id; String get title; DateTime get date;@TimeOfDayJsonConverter() TimeOfDay get startTime;@TimeOfDayJsonConverter() TimeOfDay get endTime; DateTime get createdAt; DateTime get updatedAt;// event id of an external calendar event, is the same value as id for
+ String get id; String get title; DateTime get start; DateTime get end; DateTime get createdAt; DateTime get updatedAt;// event id of an external calendar event, is the same value as id for
 // smart events created in app
- String get externalEventId;// calendar id of an external calendar event, can be null for new events,
+ String get externalEventId; bool? get allDay; String? get location;// calendar id of an external calendar event, can be null for new events,
 // created in app
  String? get externalCalendarId; int? get calendarColor; String? get description; bool? get isRecurring; RecurringType? get recurringType; bool? get adjustBasedOnCompletion; DateTime? get deletedAt; DateTime? get recurringEndDateTime;
 /// Create a copy of SmartEvent
@@ -32,12 +32,12 @@ $SmartEventCopyWith<SmartEvent> get copyWith => _$SmartEventCopyWithImpl<SmartEv
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SmartEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.externalEventId, externalEventId) || other.externalEventId == externalEventId)&&(identical(other.externalCalendarId, externalCalendarId) || other.externalCalendarId == externalCalendarId)&&(identical(other.calendarColor, calendarColor) || other.calendarColor == calendarColor)&&(identical(other.description, description) || other.description == description)&&(identical(other.isRecurring, isRecurring) || other.isRecurring == isRecurring)&&(identical(other.recurringType, recurringType) || other.recurringType == recurringType)&&(identical(other.adjustBasedOnCompletion, adjustBasedOnCompletion) || other.adjustBasedOnCompletion == adjustBasedOnCompletion)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.recurringEndDateTime, recurringEndDateTime) || other.recurringEndDateTime == recurringEndDateTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SmartEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.externalEventId, externalEventId) || other.externalEventId == externalEventId)&&(identical(other.allDay, allDay) || other.allDay == allDay)&&(identical(other.location, location) || other.location == location)&&(identical(other.externalCalendarId, externalCalendarId) || other.externalCalendarId == externalCalendarId)&&(identical(other.calendarColor, calendarColor) || other.calendarColor == calendarColor)&&(identical(other.description, description) || other.description == description)&&(identical(other.isRecurring, isRecurring) || other.isRecurring == isRecurring)&&(identical(other.recurringType, recurringType) || other.recurringType == recurringType)&&(identical(other.adjustBasedOnCompletion, adjustBasedOnCompletion) || other.adjustBasedOnCompletion == adjustBasedOnCompletion)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.recurringEndDateTime, recurringEndDateTime) || other.recurringEndDateTime == recurringEndDateTime));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,date,startTime,endTime,createdAt,updatedAt,externalEventId,externalCalendarId,calendarColor,description,isRecurring,recurringType,adjustBasedOnCompletion,deletedAt,recurringEndDateTime);
+int get hashCode => Object.hash(runtimeType,id,title,start,end,createdAt,updatedAt,externalEventId,allDay,location,externalCalendarId,calendarColor,description,isRecurring,recurringType,adjustBasedOnCompletion,deletedAt,recurringEndDateTime);
 
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SmartEventCopyWith<$Res>  {
   factory $SmartEventCopyWith(SmartEvent value, $Res Function(SmartEvent) _then) = _$SmartEventCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, DateTime date,@TimeOfDayJsonConverter() TimeOfDay startTime,@TimeOfDayJsonConverter() TimeOfDay endTime, DateTime createdAt, DateTime updatedAt, String externalEventId, String? externalCalendarId, int? calendarColor, String? description, bool? isRecurring, RecurringType? recurringType, bool? adjustBasedOnCompletion, DateTime? deletedAt, DateTime? recurringEndDateTime
+ String id, String title, DateTime start, DateTime end, DateTime createdAt, DateTime updatedAt, String externalEventId, bool? allDay, String? location, String? externalCalendarId, int? calendarColor, String? description, bool? isRecurring, RecurringType? recurringType, bool? adjustBasedOnCompletion, DateTime? deletedAt, DateTime? recurringEndDateTime
 });
 
 
@@ -65,17 +65,18 @@ class _$SmartEventCopyWithImpl<$Res>
 
 /// Create a copy of SmartEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? date = null,Object? startTime = null,Object? endTime = null,Object? createdAt = null,Object? updatedAt = null,Object? externalEventId = null,Object? externalCalendarId = freezed,Object? calendarColor = freezed,Object? description = freezed,Object? isRecurring = freezed,Object? recurringType = freezed,Object? adjustBasedOnCompletion = freezed,Object? deletedAt = freezed,Object? recurringEndDateTime = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? start = null,Object? end = null,Object? createdAt = null,Object? updatedAt = null,Object? externalEventId = null,Object? allDay = freezed,Object? location = freezed,Object? externalCalendarId = freezed,Object? calendarColor = freezed,Object? description = freezed,Object? isRecurring = freezed,Object? recurringType = freezed,Object? adjustBasedOnCompletion = freezed,Object? deletedAt = freezed,Object? recurringEndDateTime = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,startTime: null == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
-as TimeOfDay,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
-as TimeOfDay,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
+as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
+as DateTime,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,externalEventId: null == externalEventId ? _self.externalEventId : externalEventId // ignore: cast_nullable_to_non_nullable
-as String,externalCalendarId: freezed == externalCalendarId ? _self.externalCalendarId : externalCalendarId // ignore: cast_nullable_to_non_nullable
+as String,allDay: freezed == allDay ? _self.allDay : allDay // ignore: cast_nullable_to_non_nullable
+as bool?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,externalCalendarId: freezed == externalCalendarId ? _self.externalCalendarId : externalCalendarId // ignore: cast_nullable_to_non_nullable
 as String?,calendarColor: freezed == calendarColor ? _self.calendarColor : calendarColor // ignore: cast_nullable_to_non_nullable
 as int?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,isRecurring: freezed == isRecurring ? _self.isRecurring : isRecurring // ignore: cast_nullable_to_non_nullable
@@ -168,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  DateTime date, @TimeOfDayJsonConverter()  TimeOfDay startTime, @TimeOfDayJsonConverter()  TimeOfDay endTime,  DateTime createdAt,  DateTime updatedAt,  String externalEventId,  String? externalCalendarId,  int? calendarColor,  String? description,  bool? isRecurring,  RecurringType? recurringType,  bool? adjustBasedOnCompletion,  DateTime? deletedAt,  DateTime? recurringEndDateTime)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  DateTime start,  DateTime end,  DateTime createdAt,  DateTime updatedAt,  String externalEventId,  bool? allDay,  String? location,  String? externalCalendarId,  int? calendarColor,  String? description,  bool? isRecurring,  RecurringType? recurringType,  bool? adjustBasedOnCompletion,  DateTime? deletedAt,  DateTime? recurringEndDateTime)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SmartEvent() when $default != null:
-return $default(_that.id,_that.title,_that.date,_that.startTime,_that.endTime,_that.createdAt,_that.updatedAt,_that.externalEventId,_that.externalCalendarId,_that.calendarColor,_that.description,_that.isRecurring,_that.recurringType,_that.adjustBasedOnCompletion,_that.deletedAt,_that.recurringEndDateTime);case _:
+return $default(_that.id,_that.title,_that.start,_that.end,_that.createdAt,_that.updatedAt,_that.externalEventId,_that.allDay,_that.location,_that.externalCalendarId,_that.calendarColor,_that.description,_that.isRecurring,_that.recurringType,_that.adjustBasedOnCompletion,_that.deletedAt,_that.recurringEndDateTime);case _:
   return orElse();
 
 }
@@ -189,10 +190,10 @@ return $default(_that.id,_that.title,_that.date,_that.startTime,_that.endTime,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  DateTime date, @TimeOfDayJsonConverter()  TimeOfDay startTime, @TimeOfDayJsonConverter()  TimeOfDay endTime,  DateTime createdAt,  DateTime updatedAt,  String externalEventId,  String? externalCalendarId,  int? calendarColor,  String? description,  bool? isRecurring,  RecurringType? recurringType,  bool? adjustBasedOnCompletion,  DateTime? deletedAt,  DateTime? recurringEndDateTime)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  DateTime start,  DateTime end,  DateTime createdAt,  DateTime updatedAt,  String externalEventId,  bool? allDay,  String? location,  String? externalCalendarId,  int? calendarColor,  String? description,  bool? isRecurring,  RecurringType? recurringType,  bool? adjustBasedOnCompletion,  DateTime? deletedAt,  DateTime? recurringEndDateTime)  $default,) {final _that = this;
 switch (_that) {
 case _SmartEvent():
-return $default(_that.id,_that.title,_that.date,_that.startTime,_that.endTime,_that.createdAt,_that.updatedAt,_that.externalEventId,_that.externalCalendarId,_that.calendarColor,_that.description,_that.isRecurring,_that.recurringType,_that.adjustBasedOnCompletion,_that.deletedAt,_that.recurringEndDateTime);case _:
+return $default(_that.id,_that.title,_that.start,_that.end,_that.createdAt,_that.updatedAt,_that.externalEventId,_that.allDay,_that.location,_that.externalCalendarId,_that.calendarColor,_that.description,_that.isRecurring,_that.recurringType,_that.adjustBasedOnCompletion,_that.deletedAt,_that.recurringEndDateTime);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -209,10 +210,10 @@ return $default(_that.id,_that.title,_that.date,_that.startTime,_that.endTime,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  DateTime date, @TimeOfDayJsonConverter()  TimeOfDay startTime, @TimeOfDayJsonConverter()  TimeOfDay endTime,  DateTime createdAt,  DateTime updatedAt,  String externalEventId,  String? externalCalendarId,  int? calendarColor,  String? description,  bool? isRecurring,  RecurringType? recurringType,  bool? adjustBasedOnCompletion,  DateTime? deletedAt,  DateTime? recurringEndDateTime)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  DateTime start,  DateTime end,  DateTime createdAt,  DateTime updatedAt,  String externalEventId,  bool? allDay,  String? location,  String? externalCalendarId,  int? calendarColor,  String? description,  bool? isRecurring,  RecurringType? recurringType,  bool? adjustBasedOnCompletion,  DateTime? deletedAt,  DateTime? recurringEndDateTime)?  $default,) {final _that = this;
 switch (_that) {
 case _SmartEvent() when $default != null:
-return $default(_that.id,_that.title,_that.date,_that.startTime,_that.endTime,_that.createdAt,_that.updatedAt,_that.externalEventId,_that.externalCalendarId,_that.calendarColor,_that.description,_that.isRecurring,_that.recurringType,_that.adjustBasedOnCompletion,_that.deletedAt,_that.recurringEndDateTime);case _:
+return $default(_that.id,_that.title,_that.start,_that.end,_that.createdAt,_that.updatedAt,_that.externalEventId,_that.allDay,_that.location,_that.externalCalendarId,_that.calendarColor,_that.description,_that.isRecurring,_that.recurringType,_that.adjustBasedOnCompletion,_that.deletedAt,_that.recurringEndDateTime);case _:
   return null;
 
 }
@@ -224,19 +225,20 @@ return $default(_that.id,_that.title,_that.date,_that.startTime,_that.endTime,_t
 @JsonSerializable()
 
 class _SmartEvent extends SmartEvent {
-  const _SmartEvent({required this.id, required this.title, required this.date, @TimeOfDayJsonConverter() required this.startTime, @TimeOfDayJsonConverter() required this.endTime, required this.createdAt, required this.updatedAt, required this.externalEventId, this.externalCalendarId, this.calendarColor = 0xFF2196F3, this.description, this.isRecurring, this.recurringType, this.adjustBasedOnCompletion, this.deletedAt, this.recurringEndDateTime}): super._();
+  const _SmartEvent({required this.id, required this.title, required this.start, required this.end, required this.createdAt, required this.updatedAt, required this.externalEventId, this.allDay, this.location, this.externalCalendarId, this.calendarColor = 0xFF2196F3, this.description, this.isRecurring, this.recurringType, this.adjustBasedOnCompletion, this.deletedAt, this.recurringEndDateTime}): super._();
   factory _SmartEvent.fromJson(Map<String, dynamic> json) => _$SmartEventFromJson(json);
 
 @override final  String id;
 @override final  String title;
-@override final  DateTime date;
-@override@TimeOfDayJsonConverter() final  TimeOfDay startTime;
-@override@TimeOfDayJsonConverter() final  TimeOfDay endTime;
+@override final  DateTime start;
+@override final  DateTime end;
 @override final  DateTime createdAt;
 @override final  DateTime updatedAt;
 // event id of an external calendar event, is the same value as id for
 // smart events created in app
 @override final  String externalEventId;
+@override final  bool? allDay;
+@override final  String? location;
 // calendar id of an external calendar event, can be null for new events,
 // created in app
 @override final  String? externalCalendarId;
@@ -261,12 +263,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SmartEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.externalEventId, externalEventId) || other.externalEventId == externalEventId)&&(identical(other.externalCalendarId, externalCalendarId) || other.externalCalendarId == externalCalendarId)&&(identical(other.calendarColor, calendarColor) || other.calendarColor == calendarColor)&&(identical(other.description, description) || other.description == description)&&(identical(other.isRecurring, isRecurring) || other.isRecurring == isRecurring)&&(identical(other.recurringType, recurringType) || other.recurringType == recurringType)&&(identical(other.adjustBasedOnCompletion, adjustBasedOnCompletion) || other.adjustBasedOnCompletion == adjustBasedOnCompletion)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.recurringEndDateTime, recurringEndDateTime) || other.recurringEndDateTime == recurringEndDateTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SmartEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.externalEventId, externalEventId) || other.externalEventId == externalEventId)&&(identical(other.allDay, allDay) || other.allDay == allDay)&&(identical(other.location, location) || other.location == location)&&(identical(other.externalCalendarId, externalCalendarId) || other.externalCalendarId == externalCalendarId)&&(identical(other.calendarColor, calendarColor) || other.calendarColor == calendarColor)&&(identical(other.description, description) || other.description == description)&&(identical(other.isRecurring, isRecurring) || other.isRecurring == isRecurring)&&(identical(other.recurringType, recurringType) || other.recurringType == recurringType)&&(identical(other.adjustBasedOnCompletion, adjustBasedOnCompletion) || other.adjustBasedOnCompletion == adjustBasedOnCompletion)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.recurringEndDateTime, recurringEndDateTime) || other.recurringEndDateTime == recurringEndDateTime));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,date,startTime,endTime,createdAt,updatedAt,externalEventId,externalCalendarId,calendarColor,description,isRecurring,recurringType,adjustBasedOnCompletion,deletedAt,recurringEndDateTime);
+int get hashCode => Object.hash(runtimeType,id,title,start,end,createdAt,updatedAt,externalEventId,allDay,location,externalCalendarId,calendarColor,description,isRecurring,recurringType,adjustBasedOnCompletion,deletedAt,recurringEndDateTime);
 
 
 
@@ -277,7 +279,7 @@ abstract mixin class _$SmartEventCopyWith<$Res> implements $SmartEventCopyWith<$
   factory _$SmartEventCopyWith(_SmartEvent value, $Res Function(_SmartEvent) _then) = __$SmartEventCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, DateTime date,@TimeOfDayJsonConverter() TimeOfDay startTime,@TimeOfDayJsonConverter() TimeOfDay endTime, DateTime createdAt, DateTime updatedAt, String externalEventId, String? externalCalendarId, int? calendarColor, String? description, bool? isRecurring, RecurringType? recurringType, bool? adjustBasedOnCompletion, DateTime? deletedAt, DateTime? recurringEndDateTime
+ String id, String title, DateTime start, DateTime end, DateTime createdAt, DateTime updatedAt, String externalEventId, bool? allDay, String? location, String? externalCalendarId, int? calendarColor, String? description, bool? isRecurring, RecurringType? recurringType, bool? adjustBasedOnCompletion, DateTime? deletedAt, DateTime? recurringEndDateTime
 });
 
 
@@ -294,17 +296,18 @@ class __$SmartEventCopyWithImpl<$Res>
 
 /// Create a copy of SmartEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? date = null,Object? startTime = null,Object? endTime = null,Object? createdAt = null,Object? updatedAt = null,Object? externalEventId = null,Object? externalCalendarId = freezed,Object? calendarColor = freezed,Object? description = freezed,Object? isRecurring = freezed,Object? recurringType = freezed,Object? adjustBasedOnCompletion = freezed,Object? deletedAt = freezed,Object? recurringEndDateTime = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? start = null,Object? end = null,Object? createdAt = null,Object? updatedAt = null,Object? externalEventId = null,Object? allDay = freezed,Object? location = freezed,Object? externalCalendarId = freezed,Object? calendarColor = freezed,Object? description = freezed,Object? isRecurring = freezed,Object? recurringType = freezed,Object? adjustBasedOnCompletion = freezed,Object? deletedAt = freezed,Object? recurringEndDateTime = freezed,}) {
   return _then(_SmartEvent(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,startTime: null == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
-as TimeOfDay,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
-as TimeOfDay,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
+as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
+as DateTime,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,externalEventId: null == externalEventId ? _self.externalEventId : externalEventId // ignore: cast_nullable_to_non_nullable
-as String,externalCalendarId: freezed == externalCalendarId ? _self.externalCalendarId : externalCalendarId // ignore: cast_nullable_to_non_nullable
+as String,allDay: freezed == allDay ? _self.allDay : allDay // ignore: cast_nullable_to_non_nullable
+as bool?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,externalCalendarId: freezed == externalCalendarId ? _self.externalCalendarId : externalCalendarId // ignore: cast_nullable_to_non_nullable
 as String?,calendarColor: freezed == calendarColor ? _self.calendarColor : calendarColor // ignore: cast_nullable_to_non_nullable
 as int?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,isRecurring: freezed == isRecurring ? _self.isRecurring : isRecurring // ignore: cast_nullable_to_non_nullable

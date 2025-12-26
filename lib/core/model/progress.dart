@@ -2,7 +2,7 @@
 
 import 'package:drift/drift.dart' hide JsonKey;
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:smart_cal/core/data/database/database.dart';
+import 'package:smart_cal/core/core.dart';
 
 part 'progress.freezed.dart';
 part 'progress.g.dart';
@@ -50,7 +50,4 @@ abstract class Progress with _$Progress implements Insertable<Progress> {
   }
 }
 
-enum ProgressStatus {
-  none,
-  completed,
-}
+enum ProgressStatus { none, completed }

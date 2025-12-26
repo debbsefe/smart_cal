@@ -1,6 +1,5 @@
 import 'package:clock/clock.dart';
 import 'package:drift/native.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_cal/core/core.dart';
 
@@ -8,11 +7,7 @@ void main() {
   late Database database;
 
   setUp(() {
-    database = Database(
-      'db',
-      'test123',
-      e: NativeDatabase.memory(),
-    );
+    database = Database('db', 'test123', e: NativeDatabase.memory());
   });
 
   tearDown(() async {
@@ -26,13 +21,11 @@ void main() {
       id: '1',
       externalEventId: '1',
       title: 'test',
-      date: startDate,
-      startTime: TimeOfDay.now(),
-      endTime: TimeOfDay.fromDateTime(
-        DateTime.now().add(const Duration(hours: 1)),
-      ),
+      start: DateTime.now(),
+      end: DateTime.now().add(const Duration(hours: 1)),
+
       createdAt: DateTime.now(),
-      updatedAt: DateTime.now(), /* event properties */
+      updatedAt: DateTime.now() /* event properties */,
     );
 
     await database.smartEventDao.insertEvent(event);
@@ -50,13 +43,10 @@ void main() {
       id: '1',
       externalEventId: '1',
       title: 'test',
-      date: DateTime.now(),
-      startTime: TimeOfDay.now(),
-      endTime: TimeOfDay.fromDateTime(
-        DateTime.now().add(const Duration(hours: 1)),
-      ),
+      start: DateTime.now(),
+      end: DateTime.now().add(const Duration(hours: 1)),
       createdAt: DateTime.now(),
-      updatedAt: DateTime.now(), /* event properties */
+      updatedAt: DateTime.now() /* event properties */,
     );
 
     await database.smartEventDao.deleteEvent(event);

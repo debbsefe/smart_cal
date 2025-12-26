@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          databases:
+            # Required: A name for the database and its path
+            database: lib/core/database/database.dart
+           # The directory where the schema files are stored:
+          schema_dir: lib/core/database/drift_schemas
