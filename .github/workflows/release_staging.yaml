@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'lib/**'
+      - "pubspec.yaml"
+      - "pubspec.lock"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
