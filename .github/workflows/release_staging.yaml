@@ -56,7 +56,7 @@ jobs:
       - name: Build Flutter appbundle
         run: flutter build appbundle --flavor staging -t lib/main_staging.dart --build-number $GITHUB_RUN_NUMBER
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: app-staging-release.aab
           path: build/app/outputs/bundle/stagingRelease/app-staging-release.aab
